@@ -47,6 +47,7 @@
 		9D51560F26A1EF7C0075EBC7 /* ListenerAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerAppUITests.swift; sourceTree = "<group>"; };
 		9D51561126A1EF7C0075EBC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D51562126A1F0DF0075EBC7 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		9D51562A26A1F1B40075EBC7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				9D51562126A1F0DF0075EBC7 /* LICENSE */,
+				9D51562A26A1F1B40075EBC7 /* README.md */,
 				9D5155F126A1EF7B0075EBC7 /* ListenerApp */,
 				9D51560326A1EF7C0075EBC7 /* ListenerAppTests */,
 				9D51560E26A1EF7C0075EBC7 /* ListenerAppUITests */,
