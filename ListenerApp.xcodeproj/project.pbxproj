@@ -14,6 +14,7 @@
 		9D51560526A1EF7C0075EBC7 /* ListenerAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560426A1EF7C0075EBC7 /* ListenerAppTests.swift */; };
 		9D51561026A1EF7C0075EBC7 /* ListenerAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560F26A1EF7C0075EBC7 /* ListenerAppUITests.swift */; };
 		9D51562226A1F0DF0075EBC7 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9D51562126A1F0DF0075EBC7 /* LICENSE */; };
+		9D51563126A278BB0075EBC7 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D51563026A278BB0075EBC7 /* Speech.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		9D51561126A1EF7C0075EBC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D51562126A1F0DF0075EBC7 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9D51562A26A1F1B40075EBC7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		9D51563026A278BB0075EBC7 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D51563126A278BB0075EBC7 /* Speech.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +87,7 @@
 				9D51560326A1EF7C0075EBC7 /* ListenerAppTests */,
 				9D51560E26A1EF7C0075EBC7 /* ListenerAppUITests */,
 				9D5155F026A1EF7B0075EBC7 /* Products */,
+				9D51562F26A278BA0075EBC7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,6 +137,14 @@
 				9D51561126A1EF7C0075EBC7 /* Info.plist */,
 			);
 			path = ListenerAppUITests;
+			sourceTree = "<group>";
+		};
+		9D51562F26A278BA0075EBC7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9D51563026A278BB0075EBC7 /* Speech.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

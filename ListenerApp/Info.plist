@@ -17,9 +17,11 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>29</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>The app uses speech recognition to dictate text to your Apple IIgs</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
