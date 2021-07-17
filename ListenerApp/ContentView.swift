@@ -31,16 +31,20 @@ struct ContentView: View {
                 validate(destination: ipAddress)
             }
                 .padding()
+            
             Label(textHeard, systemImage:"")
                 .labelStyle(TitleOnlyLabelStyle())
                 .padding()
+            
             Button("Listen") {
                 listen()
             }
-            .padding()
-            .background(listening ? Color.red : Color.white)
-            .foregroundColor(listening ? .black : .blue)
-            .disabled(listenEnabled == false)
+                .padding()
+                .background(listening ? Color.red : Color.white)
+                .foregroundColor(listening ? .black : .blue)
+                .disabled(listenEnabled == false)
+                .frame(maxWidth: .infinity)
+                .buttonStyle(PlainButtonStyle())
         }
     }
     
