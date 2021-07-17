@@ -10,7 +10,10 @@ import Speech
 
 struct ContentView: View {
     @State private var listening = false
+    @State private var listenEnabled = false
     @State private var textHeard = ""
+    @State private var ipAddress = ""
+    @State private var isEditing = false
     
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
     
@@ -22,6 +25,12 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            TextField("IP Address", text: $ipAddress) { isEditing in
+                self.isEditing = isEditing
+            } onCommit: {
+                validate(destination: ipAddress)
+            }
+                .padding()
             Label(textHeard, systemImage:"")
                 .labelStyle(TitleOnlyLabelStyle())
                 .padding()
@@ -31,7 +40,12 @@ struct ContentView: View {
             .padding()
             .background(listening ? Color.red : Color.white)
             .foregroundColor(listening ? .black : .blue)
+            .disabled(listenEnabled == false)
         }
+    }
+    
+    func validate(destination : String) {
+        listenEnabled = true
     }
     
     func listen() {
