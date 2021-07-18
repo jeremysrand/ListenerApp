@@ -15,6 +15,12 @@ struct ContentView: View {
     @State private var ipAddress = ""
     @State private var isEditing = false
     
+    let LISTEN_STATE_MSG = 1
+    let LISTEN_TEXT_MSG = 2
+    
+    let port = 19026
+    @State private var client: TCPClient?
+    
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
     
     @State private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -49,7 +55,18 @@ struct ContentView: View {
     }
     
     func validate(destination : String) {
-        listenEnabled = true
+        client = TCPClient(address: destination, port: Int32(port))
+        guard let client = client else { return }
+        switch client.connect(timeout: 10) {
+        case .success:
+            listenEnabled = true
+        case .failure(let error):
+            client.close()
+            self.client = nil
+            textHeard.append("\n")
+            textHeard.append(String(describing: error))
+            break
+        }
     }
     
     func listen() {
@@ -84,19 +101,50 @@ struct ContentView: View {
             }
         }
         
+        guard let client = client else { return }
+        if (self.listening) {
+            switch (client.send(data: isListening())) {
+                case .success:
+                    break
+                case .failure(let error):
+                    self.listening = false
+                    textHeard.append("\n")
+                    textHeard.append(String(describing: error))
+            }
+        }
+        
         if (self.listening) {
             do {
                 try startRecording()
             }
             catch {
-                
+                self.listening = false
             }
-        } else {
+        }
+        
+        if (!self.listening) {
             audioEngine.stop()
             recognitionRequest?.endAudio()
+            switch (client.send(data: isListening())) {
+                case .success:
+                    break
+                case .failure(let error):
+                    self.listening = false
+                    textHeard.append("\n")
+                    textHeard.append(String(describing: error))
+            }
         }
     }
+    
+    private func isListening() -> Data {
+        return pack("<hh", [LISTEN_STATE_MSG, listening ? 1 : 0])
+    }
 
+    private func send(latestText : String) {
+        
+        self.textHeard = latestText
+    }
+    
     private func startRecording() throws {
         
         // Cancel the previous task if it's running.
@@ -119,6 +167,8 @@ struct ContentView: View {
             recognitionRequest.requiresOnDeviceRecognition = false
         }
         
+        self.textHeard = ""
+        
         // Create a recognition task for the speech recognition session.
         // Keep a reference to the task so that it can be canceled.
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
@@ -126,7 +176,7 @@ struct ContentView: View {
             
             if let result = result {
                 // Update the text view with the results.
-                self.textHeard = result.bestTranscription.formattedString
+                send(latestText: result.bestTranscription.formattedString)
                 isFinal = result.isFinal
                 print("Text \(result.bestTranscription.formattedString)")
             }
