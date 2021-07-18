@@ -141,8 +141,33 @@ struct ContentView: View {
     }
 
     private func send(latestText : String) {
+        guard let client = client else { return }
+        var commonChars = self.textHeard.count
+        while (commonChars > 0) {
+            if (latestText.prefix(commonChars) ==  self.textHeard.prefix(commonChars)) {
+                break
+            }
+            commonChars -= 1
+        }
+        var stringToSend = ""
+        if (commonChars < self.textHeard.count) {
+            stringToSend = String(repeating: "\u{8}", count: self.textHeard.count - commonChars)
+        }
+        stringToSend.append(contentsOf: latestText.suffix(latestText.count - commonChars))
         
-        self.textHeard = latestText
+        if (stringToSend.count > 0) {
+            // TODO - Handle strings to send that are longer than 64K (doubt that would happen though)
+            // TODO - Try to convert encoding from utf8 to something the GS can understand.
+            switch (client.send(data: pack("<hh\(stringToSend.count)s", [LISTEN_TEXT_MSG, stringToSend.count, stringToSend]))) {
+                case .success:
+                    self.textHeard = latestText
+                    break
+                case .failure(let error):
+                    self.listening = false
+                    textHeard.append("\n")
+                    textHeard.append(String(describing: error))
+            }
+        }
     }
     
     private func startRecording() throws {
