@@ -214,6 +214,8 @@ struct ContentView: View {
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 self.listening = false
+                guard let client = client else { return }
+                client.send(data: isListening())
             }
         }
 
