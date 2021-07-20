@@ -151,7 +151,7 @@ struct ContentView: View {
         }
         var stringToSend = ""
         if (commonChars < self.textHeard.count) {
-            stringToSend = String(repeating: "\u{8}", count: self.textHeard.count - commonChars)
+            stringToSend = String(repeating: "\u{7f}", count: self.textHeard.count - commonChars)
         }
         stringToSend.append(contentsOf: latestText.suffix(latestText.count - commonChars))
         
