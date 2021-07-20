@@ -17,9 +17,11 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>87</string>
+	<string>93</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app uses the microphone in order to do speech recognition</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>The app uses speech recognition to dictate text to your Apple IIgs</string>
 	<key>UIApplicationSceneManifest</key>

@@ -164,7 +164,7 @@ struct ContentView: View {
         if (commonChars < self.textHeard.count) {
             stringToSend = String(repeating: "\u{7f}", count: self.textHeard.count - commonChars)
         }
-        stringToSend.append(contentsOf: latestText.suffix(latestText.count - commonChars))
+        stringToSend.append(contentsOf: latestText.suffix(latestText.count - commonChars).replacingOccurrences(of: "\n", with: "\r"))
         
         if (stringToSend.count > 0) {
             // TODO - Handle strings to send that are longer than 64K (doubt that would happen though)
