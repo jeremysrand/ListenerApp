@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var listening = false
     @State private var listenEnabled = false
     @State private var textHeard = ""
+    @State private var log = ""
     @State private var ipAddress = ""
     @State private var isEditing = false
     
@@ -38,15 +39,16 @@ struct ContentView: View {
             }
                 .padding()
             
-            Label(textHeard, systemImage:"")
-                .labelStyle(TitleOnlyLabelStyle())
-                .padding()
+            ScrollView() {
+                Text(log)
+                    .multilineTextAlignment(.leading)
+            }
             
             Button("Listen") {
                 listen()
             }
                 .padding()
-                .background(listening ? Color.red : Color.white)
+                .background(listening ? Color.red : Color.clear)
                 .foregroundColor(listening ? .black : .blue)
                 .disabled(listenEnabled == false)
                 .frame(maxWidth: .infinity)
@@ -54,17 +56,26 @@ struct ContentView: View {
         }
     }
     
+    func logError(message: String) {
+        log.append("ERROR: " + message + "\n")
+    }
+    
+    func logEvent(message: String) {
+        log.append("EVENT: " + message + "\n")
+    }
+    
     func validate(destination : String) {
+        logEvent(message: "Attempting to connect to " + destination)
         client = TCPClient(address: destination, port: Int32(port))
         guard let client = client else { return }
         switch client.connect(timeout: 10) {
         case .success:
             listenEnabled = true
+            logEvent(message: "Connected to " + destination)
         case .failure(let error):
             client.close()
             self.client = nil
-            textHeard.append("\n")
-            textHeard.append(String(describing: error))
+            logError(message: String(describing: error))
             break
         }
     }
@@ -108,14 +119,14 @@ struct ContentView: View {
                     break
                 case .failure(let error):
                     self.listening = false
-                    textHeard.append("\n")
-                    textHeard.append(String(describing: error))
+                    logError(message: String(describing: error))
             }
         }
         
         if (self.listening) {
             do {
                 try startRecording()
+                logEvent(message: "Listening...")
             }
             catch {
                 self.listening = false
@@ -123,6 +134,7 @@ struct ContentView: View {
         }
         
         if (!self.listening) {
+            logEvent(message: "Listening stopped")
             audioEngine.stop()
             recognitionRequest?.endAudio()
             switch (client.send(data: isListening())) {
@@ -130,8 +142,7 @@ struct ContentView: View {
                     break
                 case .failure(let error):
                     self.listening = false
-                    textHeard.append("\n")
-                    textHeard.append(String(describing: error))
+                    logError(message: String(describing: error))
             }
         }
     }
@@ -161,11 +172,11 @@ struct ContentView: View {
             switch (client.send(data: pack("<hh\(stringToSend.count)s", [LISTEN_TEXT_MSG, stringToSend.count, stringToSend]))) {
                 case .success:
                     self.textHeard = latestText
+                    logEvent(message: "Sent \"" + stringToSend + "\"")
                     break
                 case .failure(let error):
                     self.listening = false
-                    textHeard.append("\n")
-                    textHeard.append(String(describing: error))
+                    logError(message: String(describing: error))
             }
         }
     }
@@ -214,6 +225,7 @@ struct ContentView: View {
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 self.listening = false
+                logEvent(message: "Listening stopped")
                 guard let client = client else { return }
                 client.send(data: isListening())
             }
