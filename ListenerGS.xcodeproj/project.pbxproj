@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9D5155F326A1EF7B0075EBC7 /* ListenerAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5155F226A1EF7B0075EBC7 /* ListenerAppApp.swift */; };
+		9D5155F326A1EF7B0075EBC7 /* ListenerGSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */; };
 		9D5155F526A1EF7B0075EBC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5155F426A1EF7B0075EBC7 /* ContentView.swift */; };
 		9D5155F726A1EF7C0075EBC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */; };
 		9D5155FA26A1EF7C0075EBC7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D5155F926A1EF7C0075EBC7 /* Preview Assets.xcassets */; };
-		9D51560526A1EF7C0075EBC7 /* ListenerAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560426A1EF7C0075EBC7 /* ListenerAppTests.swift */; };
-		9D51561026A1EF7C0075EBC7 /* ListenerAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560F26A1EF7C0075EBC7 /* ListenerAppUITests.swift */; };
+		9D51560526A1EF7C0075EBC7 /* ListenerGSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560426A1EF7C0075EBC7 /* ListenerGSTests.swift */; };
+		9D51561026A1EF7C0075EBC7 /* ListenerGSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560F26A1EF7C0075EBC7 /* ListenerGSUITests.swift */; };
 		9D51562226A1F0DF0075EBC7 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9D51562126A1F0DF0075EBC7 /* LICENSE */; };
 		9D51563126A278BB0075EBC7 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D51563026A278BB0075EBC7 /* Speech.framework */; };
 		9D51565226A36B410075EBC7 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51564C26A36B410075EBC7 /* Result.swift */; };
@@ -44,23 +44,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9D0DC15826F2E47A007EB92D /* ListenerApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ListenerApp.entitlements; sourceTree = "<group>"; };
-		9D5155EF26A1EF7B0075EBC7 /* ListenerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListenerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D5155F226A1EF7B0075EBC7 /* ListenerAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerAppApp.swift; sourceTree = "<group>"; };
+		9D0DC15826F2E47A007EB92D /* ListenerGS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ListenerGS.entitlements; sourceTree = "<group>"; };
+		9D5155EF26A1EF7B0075EBC7 /* ListenerGS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListenerGS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerGSApp.swift; sourceTree = "<group>"; };
 		9D5155F426A1EF7B0075EBC7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9D5155F926A1EF7C0075EBC7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9D5155FB26A1EF7C0075EBC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9D51560026A1EF7C0075EBC7 /* ListenerAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ListenerAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D51560426A1EF7C0075EBC7 /* ListenerAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerAppTests.swift; sourceTree = "<group>"; };
+		9D51560026A1EF7C0075EBC7 /* ListenerGSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ListenerGSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D51560426A1EF7C0075EBC7 /* ListenerGSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerGSTests.swift; sourceTree = "<group>"; };
 		9D51560626A1EF7C0075EBC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9D51560B26A1EF7C0075EBC7 /* ListenerAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ListenerAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D51560F26A1EF7C0075EBC7 /* ListenerAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerAppUITests.swift; sourceTree = "<group>"; };
+		9D51560B26A1EF7C0075EBC7 /* ListenerGSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ListenerGSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D51560F26A1EF7C0075EBC7 /* ListenerGSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerGSUITests.swift; sourceTree = "<group>"; };
 		9D51561126A1EF7C0075EBC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D51562126A1F0DF0075EBC7 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9D51562A26A1F1B40075EBC7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9D51563026A278BB0075EBC7 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
-		9D51563726A36AF20075EBC7 /* ListenerApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ListenerApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		9D51563726A36AF20075EBC7 /* ListenerGS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ListenerGS-Bridging-Header.h"; sourceTree = "<group>"; };
 		9D51564B26A36B410075EBC7 /* SwiftSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftSocket.h; sourceTree = "<group>"; };
 		9D51564C26A36B410075EBC7 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		9D51564D26A36B410075EBC7 /* yudpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yudpsocket.c; sourceTree = "<group>"; };
@@ -104,9 +104,9 @@
 			children = (
 				9D51562126A1F0DF0075EBC7 /* LICENSE */,
 				9D51562A26A1F1B40075EBC7 /* README.md */,
-				9D5155F126A1EF7B0075EBC7 /* ListenerApp */,
-				9D51560326A1EF7C0075EBC7 /* ListenerAppTests */,
-				9D51560E26A1EF7C0075EBC7 /* ListenerAppUITests */,
+				9D5155F126A1EF7B0075EBC7 /* ListenerGS */,
+				9D51560326A1EF7C0075EBC7 /* ListenerGSTests */,
+				9D51560E26A1EF7C0075EBC7 /* ListenerGSUITests */,
 				9D5155F026A1EF7B0075EBC7 /* Products */,
 				9D51562F26A278BA0075EBC7 /* Frameworks */,
 			);
@@ -115,18 +115,18 @@
 		9D5155F026A1EF7B0075EBC7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9D5155EF26A1EF7B0075EBC7 /* ListenerApp.app */,
-				9D51560026A1EF7C0075EBC7 /* ListenerAppTests.xctest */,
-				9D51560B26A1EF7C0075EBC7 /* ListenerAppUITests.xctest */,
+				9D5155EF26A1EF7B0075EBC7 /* ListenerGS.app */,
+				9D51560026A1EF7C0075EBC7 /* ListenerGSTests.xctest */,
+				9D51560B26A1EF7C0075EBC7 /* ListenerGSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9D5155F126A1EF7B0075EBC7 /* ListenerApp */ = {
+		9D5155F126A1EF7B0075EBC7 /* ListenerGS */ = {
 			isa = PBXGroup;
 			children = (
-				9D0DC15826F2E47A007EB92D /* ListenerApp.entitlements */,
-				9D5155F226A1EF7B0075EBC7 /* ListenerAppApp.swift */,
+				9D0DC15826F2E47A007EB92D /* ListenerGS.entitlements */,
+				9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */,
 				9D5155F426A1EF7B0075EBC7 /* ContentView.swift */,
 				9D51566326A36F530075EBC7 /* BinUtils */,
 				9D51563626A36AD60075EBC7 /* SwiftSocket */,
@@ -134,7 +134,7 @@
 				9D5155FB26A1EF7C0075EBC7 /* Info.plist */,
 				9D5155F826A1EF7C0075EBC7 /* Preview Content */,
 			);
-			path = ListenerApp;
+			path = ListenerGS;
 			sourceTree = "<group>";
 		};
 		9D5155F826A1EF7C0075EBC7 /* Preview Content */ = {
@@ -145,22 +145,22 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		9D51560326A1EF7C0075EBC7 /* ListenerAppTests */ = {
+		9D51560326A1EF7C0075EBC7 /* ListenerGSTests */ = {
 			isa = PBXGroup;
 			children = (
-				9D51560426A1EF7C0075EBC7 /* ListenerAppTests.swift */,
+				9D51560426A1EF7C0075EBC7 /* ListenerGSTests.swift */,
 				9D51560626A1EF7C0075EBC7 /* Info.plist */,
 			);
-			path = ListenerAppTests;
+			path = ListenerGSTests;
 			sourceTree = "<group>";
 		};
-		9D51560E26A1EF7C0075EBC7 /* ListenerAppUITests */ = {
+		9D51560E26A1EF7C0075EBC7 /* ListenerGSUITests */ = {
 			isa = PBXGroup;
 			children = (
-				9D51560F26A1EF7C0075EBC7 /* ListenerAppUITests.swift */,
+				9D51560F26A1EF7C0075EBC7 /* ListenerGSUITests.swift */,
 				9D51561126A1EF7C0075EBC7 /* Info.plist */,
 			);
-			path = ListenerAppUITests;
+			path = ListenerGSUITests;
 			sourceTree = "<group>";
 		};
 		9D51562F26A278BA0075EBC7 /* Frameworks */ = {
@@ -182,7 +182,7 @@
 				9D51564F26A36B410075EBC7 /* UDPClient.swift */,
 				9D51564E26A36B410075EBC7 /* ytcpsocket.c */,
 				9D51564D26A36B410075EBC7 /* yudpsocket.c */,
-				9D51563726A36AF20075EBC7 /* ListenerApp-Bridging-Header.h */,
+				9D51563726A36AF20075EBC7 /* ListenerGS-Bridging-Header.h */,
 			);
 			path = SwiftSocket;
 			sourceTree = "<group>";
@@ -199,9 +199,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9D5155EE26A1EF7B0075EBC7 /* ListenerApp */ = {
+		9D5155EE26A1EF7B0075EBC7 /* ListenerGS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9D51561426A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerApp" */;
+			buildConfigurationList = 9D51561426A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerGS" */;
 			buildPhases = (
 				9D51562B26A20CE10075EBC7 /* ShellScript */,
 				9D5155EB26A1EF7B0075EBC7 /* Sources */,
@@ -212,14 +212,14 @@
 			);
 			dependencies = (
 			);
-			name = ListenerApp;
+			name = ListenerGS;
 			productName = ListenerApp;
-			productReference = 9D5155EF26A1EF7B0075EBC7 /* ListenerApp.app */;
+			productReference = 9D5155EF26A1EF7B0075EBC7 /* ListenerGS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9D5155FF26A1EF7C0075EBC7 /* ListenerAppTests */ = {
+		9D5155FF26A1EF7C0075EBC7 /* ListenerGSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9D51561726A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerAppTests" */;
+			buildConfigurationList = 9D51561726A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerGSTests" */;
 			buildPhases = (
 				9D5155FC26A1EF7C0075EBC7 /* Sources */,
 				9D5155FD26A1EF7C0075EBC7 /* Frameworks */,
@@ -230,14 +230,14 @@
 			dependencies = (
 				9D51560226A1EF7C0075EBC7 /* PBXTargetDependency */,
 			);
-			name = ListenerAppTests;
+			name = ListenerGSTests;
 			productName = ListenerAppTests;
-			productReference = 9D51560026A1EF7C0075EBC7 /* ListenerAppTests.xctest */;
+			productReference = 9D51560026A1EF7C0075EBC7 /* ListenerGSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9D51560A26A1EF7C0075EBC7 /* ListenerAppUITests */ = {
+		9D51560A26A1EF7C0075EBC7 /* ListenerGSUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9D51561A26A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerAppUITests" */;
+			buildConfigurationList = 9D51561A26A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerGSUITests" */;
 			buildPhases = (
 				9D51560726A1EF7C0075EBC7 /* Sources */,
 				9D51560826A1EF7C0075EBC7 /* Frameworks */,
@@ -248,9 +248,9 @@
 			dependencies = (
 				9D51560D26A1EF7C0075EBC7 /* PBXTargetDependency */,
 			);
-			name = ListenerAppUITests;
+			name = ListenerGSUITests;
 			productName = ListenerAppUITests;
-			productReference = 9D51560B26A1EF7C0075EBC7 /* ListenerAppUITests.xctest */;
+			productReference = 9D51560B26A1EF7C0075EBC7 /* ListenerGSUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -276,7 +276,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9D5155EA26A1EF7B0075EBC7 /* Build configuration list for PBXProject "ListenerApp" */;
+			buildConfigurationList = 9D5155EA26A1EF7B0075EBC7 /* Build configuration list for PBXProject "ListenerGS" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -289,9 +289,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9D5155EE26A1EF7B0075EBC7 /* ListenerApp */,
-				9D5155FF26A1EF7C0075EBC7 /* ListenerAppTests */,
-				9D51560A26A1EF7C0075EBC7 /* ListenerAppUITests */,
+				9D5155EE26A1EF7B0075EBC7 /* ListenerGS */,
+				9D5155FF26A1EF7C0075EBC7 /* ListenerGSTests */,
+				9D51560A26A1EF7C0075EBC7 /* ListenerGSUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -356,7 +356,7 @@
 				9D51565326A36B410075EBC7 /* yudpsocket.c in Sources */,
 				9D51565226A36B410075EBC7 /* Result.swift in Sources */,
 				9D5155F526A1EF7B0075EBC7 /* ContentView.swift in Sources */,
-				9D5155F326A1EF7B0075EBC7 /* ListenerAppApp.swift in Sources */,
+				9D5155F326A1EF7B0075EBC7 /* ListenerGSApp.swift in Sources */,
 				9D51566526A36F6D0075EBC7 /* BinUtils.swift in Sources */,
 				9D51565426A36B410075EBC7 /* ytcpsocket.c in Sources */,
 			);
@@ -366,7 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D51560526A1EF7C0075EBC7 /* ListenerAppTests.swift in Sources */,
+				9D51560526A1EF7C0075EBC7 /* ListenerGSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,7 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D51561026A1EF7C0075EBC7 /* ListenerAppUITests.swift in Sources */,
+				9D51561026A1EF7C0075EBC7 /* ListenerGSUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,12 +383,12 @@
 /* Begin PBXTargetDependency section */
 		9D51560226A1EF7C0075EBC7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9D5155EE26A1EF7B0075EBC7 /* ListenerApp */;
+			target = 9D5155EE26A1EF7B0075EBC7 /* ListenerGS */;
 			targetProxy = 9D51560126A1EF7C0075EBC7 /* PBXContainerItemProxy */;
 		};
 		9D51560D26A1EF7C0075EBC7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9D5155EE26A1EF7B0075EBC7 /* ListenerApp */;
+			target = 9D5155EE26A1EF7B0075EBC7 /* ListenerGS */;
 			targetProxy = 9D51560C26A1EF7C0075EBC7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -516,21 +516,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ListenerApp/ListenerApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ListenerGS/ListenerGS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"ListenerApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ListenerGS/Preview Content\"";
 				DEVELOPMENT_TEAM = VD9FGCW36C;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = ListenerApp/Info.plist;
+				INFOPLIST_FILE = ListenerGS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerGS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "ListenerApp/SwiftSocket/ListenerApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "ListenerGS/SwiftSocket/ListenerGS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -543,21 +543,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ListenerApp/ListenerApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ListenerGS/ListenerGS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"ListenerApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ListenerGS/Preview Content\"";
 				DEVELOPMENT_TEAM = VD9FGCW36C;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = ListenerApp/Info.plist;
+				INFOPLIST_FILE = ListenerGS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerGS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "ListenerApp/SwiftSocket/ListenerApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "ListenerGS/SwiftSocket/ListenerGS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -570,18 +570,18 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VD9FGCW36C;
-				INFOPLIST_FILE = ListenerAppTests/Info.plist;
+				INFOPLIST_FILE = ListenerGSTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerGSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ListenerApp.app/ListenerApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ListenerGS.app/ListenerGS";
 			};
 			name = Debug;
 		};
@@ -592,18 +592,18 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VD9FGCW36C;
-				INFOPLIST_FILE = ListenerAppTests/Info.plist;
+				INFOPLIST_FILE = ListenerGSTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerGSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ListenerApp.app/ListenerApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ListenerGS.app/ListenerGS";
 			};
 			name = Release;
 		};
@@ -613,17 +613,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VD9FGCW36C;
-				INFOPLIST_FILE = ListenerAppUITests/Info.plist;
+				INFOPLIST_FILE = ListenerGSUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerAppUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerGSUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = ListenerApp;
+				TEST_TARGET_NAME = ListenerGS;
 			};
 			name = Debug;
 		};
@@ -633,24 +633,24 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VD9FGCW36C;
-				INFOPLIST_FILE = ListenerAppUITests/Info.plist;
+				INFOPLIST_FILE = ListenerGSUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerAppUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halcyontouch.ListenerGSUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = ListenerApp;
+				TEST_TARGET_NAME = ListenerGS;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9D5155EA26A1EF7B0075EBC7 /* Build configuration list for PBXProject "ListenerApp" */ = {
+		9D5155EA26A1EF7B0075EBC7 /* Build configuration list for PBXProject "ListenerGS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9D51561226A1EF7C0075EBC7 /* Debug */,
@@ -659,7 +659,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9D51561426A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerApp" */ = {
+		9D51561426A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerGS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9D51561526A1EF7C0075EBC7 /* Debug */,
@@ -668,7 +668,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9D51561726A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerAppTests" */ = {
+		9D51561726A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerGSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9D51561826A1EF7C0075EBC7 /* Debug */,
@@ -677,7 +677,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9D51561A26A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerAppUITests" */ = {
+		9D51561A26A1EF7C0075EBC7 /* Build configuration list for PBXNativeTarget "ListenerGSUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9D51561B26A1EF7C0075EBC7 /* Debug */,

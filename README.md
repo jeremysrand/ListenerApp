@@ -1,4 +1,4 @@
-#  ListenerApp
+#  ListenerGS
 
 This is an iOS app that connects to an Apple IIgs over a network and streams text to it from voice dicatation.  It communicates to the [Listen NDA](https://github.com/jeremysrand/Listener) which must be running on your network capable Apple IIgs.  See that other project for more details about how to use this app.
 
