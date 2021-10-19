@@ -24,6 +24,7 @@
 		9D51566526A36F6D0075EBC7 /* BinUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51566426A36F6C0075EBC7 /* BinUtils.swift */; };
 		9D51567326A36FEC0075EBC7 /* BinUtils.LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9D51567226A36FEC0075EBC7 /* BinUtils.LICENSE */; };
 		9D51567E26A370380075EBC7 /* SwiftSocket.LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9D51567D26A370380075EBC7 /* SwiftSocket.LICENSE */; };
+		9D6ED23A271E6BD600D773CD /* SpeechForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6ED239271E6BD600D773CD /* SpeechForwarder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		9D51566426A36F6C0075EBC7 /* BinUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinUtils.swift; sourceTree = "<group>"; };
 		9D51567226A36FEC0075EBC7 /* BinUtils.LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BinUtils.LICENSE; sourceTree = "<group>"; };
 		9D51567D26A370380075EBC7 /* SwiftSocket.LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SwiftSocket.LICENSE; sourceTree = "<group>"; };
+		9D6ED239271E6BD600D773CD /* SpeechForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechForwarder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				9D0DC15826F2E47A007EB92D /* ListenerGS.entitlements */,
 				9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */,
 				9D5155F426A1EF7B0075EBC7 /* ContentView.swift */,
+				9D6ED239271E6BD600D773CD /* SpeechForwarder.swift */,
 				9D51566326A36F530075EBC7 /* BinUtils */,
 				9D51563626A36AD60075EBC7 /* SwiftSocket */,
 				9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */,
@@ -356,6 +359,7 @@
 				9D51565326A36B410075EBC7 /* yudpsocket.c in Sources */,
 				9D51565226A36B410075EBC7 /* Result.swift in Sources */,
 				9D5155F526A1EF7B0075EBC7 /* ContentView.swift in Sources */,
+				9D6ED23A271E6BD600D773CD /* SpeechForwarder.swift in Sources */,
 				9D5155F326A1EF7B0075EBC7 /* ListenerGSApp.swift in Sources */,
 				9D51566526A36F6D0075EBC7 /* BinUtils.swift in Sources */,
 				9D51565426A36B410075EBC7 /* ytcpsocket.c in Sources */,
