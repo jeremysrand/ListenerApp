@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ListenerGSApp: App {
+    @StateObject private var destinations = GSDestinations()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            // ContentView(destinations: destinations)
+            // ContentView()
+            MainView()
         }
     }
 }

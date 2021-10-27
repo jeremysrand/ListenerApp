@@ -10,6 +10,7 @@ import Speech
 
 struct ContentView: View {
     @StateObject private var speechForwarder = SpeechForwarder()
+    // private var destinations: GSDestinations
     
     var body: some View {
         VStack {
