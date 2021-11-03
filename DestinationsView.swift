@@ -18,6 +18,8 @@ struct DestinationsView: View {
         Destination(ipAddress: "192.168.1.21")
     ]
     @State private var editMode = EditMode.inactive
+    @State private var showPopover = false
+    @State private var newDestination = ""
     
     var body: some View {
         List {
@@ -37,10 +39,25 @@ struct DestinationsView: View {
     private var addButton: some View {
         switch editMode {
         case .inactive:
-            return AnyView(Button(action: onAdd) { Image(systemName: "plus") })
+            return AnyView(Button(action: showAdd) { Image(systemName: "plus") }
+                            .popover(
+                                isPresented: self.$showPopover,
+                                arrowEdge: .bottom
+                            ) { addPopover } )
         default:
             return AnyView(EmptyView())
         }
+    }
+    
+    private var addPopover: some View {
+        VStack {
+            Text("Enter the hostname or\nIP address of your GS:")
+            TextField("New destination", text: self.$newDestination) { isEditing in
+            } onCommit: {
+                onAdd()
+            }
+        }
+        .padding()
     }
     
     private func onDelete(offsets: IndexSet) {
@@ -51,8 +68,14 @@ struct DestinationsView: View {
         destinations.move(fromOffsets: source, toOffset: destination)
     }
     
+    func showAdd() {
+        self.showPopover = true;
+    }
+    
     func onAdd() {
-        destinations.append(Destination(ipAddress: "192.168.1.22"))
+        destinations.append(Destination(ipAddress: self.newDestination))
+        newDestination = ""
+        showPopover = false;
     }
 }
 
