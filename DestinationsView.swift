@@ -13,10 +13,7 @@ struct Destination: Identifiable, Hashable {
 }
 
 struct DestinationsView: View {
-    @State private var destinations = [
-        Destination(ipAddress: "192.168.1.20"),
-        Destination(ipAddress: "192.168.1.21")
-    ]
+    @State private var destinations:[Destination] = []
     @State private var editMode = EditMode.inactive
     @State private var showPopover = false
     @State private var newDestination = ""
@@ -51,13 +48,25 @@ struct DestinationsView: View {
     
     private var addPopover: some View {
         VStack {
-            Text("Enter the hostname or\nIP address of your GS:")
+            Text("Enter the hostname or IP address of your GS:")
+                .font(.title2)
             TextField("New destination", text: self.$newDestination) { isEditing in
             } onCommit: {
                 onAdd()
             }
-        }
-        .padding()
+            .padding()
+            HStack {
+                Button("Cancel") {
+                    self.showPopover = false
+                    editMode = EditMode.inactive
+                }
+                .padding()
+                Button("Add") {
+                    onAdd()
+                }
+                .padding()
+            }
+        }.padding()
     }
     
     private func onDelete(offsets: IndexSet) {
