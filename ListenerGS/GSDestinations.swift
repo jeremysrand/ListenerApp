@@ -61,11 +61,20 @@ class GSDestinations : ObservableObject {
     
     private func saveDestinations() {
         NSUbiquitousKeyValueStore.default.set(storedDestinations, forKey: GSDestinations.kDestinationKey)
+        NSUbiquitousKeyValueStore.default.synchronize()
+    }
+    
+    @objc func onUbiquitousKeyValueStoreDidChangeExternally(notification:Notification)
+    {
+        loadDestinations()
     }
     
     init() {
         loadDestinations()
-        
-        // JSR_TODO - Add code here to watch for changes from iCloud
+        NotificationCenter.default.addObserver(self, selector: #selector(onUbiquitousKeyValueStoreDidChangeExternally(notification:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
