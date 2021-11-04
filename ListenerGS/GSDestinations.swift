@@ -66,6 +66,9 @@ class GSDestinations : ObservableObject {
     
     @objc func onUbiquitousKeyValueStoreDidChangeExternally(notification:Notification)
     {
+        // It would be nice to do something better than just replacing dests with what we get from iCloud.
+        // I think when we do this, the entire list will be rebuilt and anything selected is probably lost.
+        // The list isn't likely to change and will also be small so maybe it isn't too big of a deal.
         loadDestinations()
     }
     
