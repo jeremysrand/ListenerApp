@@ -7,20 +7,17 @@
 
 import SwiftUI
 
-struct Destination: Identifiable, Hashable {
-    let ipAddress : String
-    let id = UUID()
-}
 
 struct DestinationsView: View {
-    @State private var destinations:[Destination] = []
     @State private var editMode = EditMode.inactive
     @State private var showPopover = false
     @State private var newDestination = ""
     
+    @StateObject private var destinations = GSDestinations()
+    
     var body: some View {
         List {
-            ForEach(destinations) { destination in
+            ForEach(destinations.dests) { destination in
                 NavigationLink(destination: Text(destination.ipAddress)) {
                     Text(destination.ipAddress)
                 }
@@ -70,11 +67,11 @@ struct DestinationsView: View {
     }
     
     private func onDelete(offsets: IndexSet) {
-        destinations.remove(atOffsets: offsets)
+        destinations.onDelete(offsets: offsets)
     }
 
     private func onMove(source: IndexSet, destination: Int) {
-        destinations.move(fromOffsets: source, toOffset: destination)
+        destinations.onMove(source: source, destination: destination)
     }
     
     func showAdd() {
@@ -82,7 +79,7 @@ struct DestinationsView: View {
     }
     
     func onAdd() {
-        destinations.append(Destination(ipAddress: self.newDestination))
+        destinations.onAdd(ipAddress: self.newDestination)
         newDestination = ""
         showPopover = false;
     }
