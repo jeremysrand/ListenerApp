@@ -79,6 +79,7 @@
 		9D6F27082728EF410089585E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9DCCDACB271FB87100F311DF /* GSDestinations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSDestinations.swift; sourceTree = "<group>"; };
 		9DD67CEF2728F5B700243FC6 /* DestinationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationsView.swift; sourceTree = "<group>"; };
+		9DD8905E27726C140084A894 /* ListenerGS Icon.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ListenerGS Icon.pxm"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +141,7 @@
 				9DCCDACB271FB87100F311DF /* GSDestinations.swift */,
 				9D5155F426A1EF7B0075EBC7 /* ContentView.swift */,
 				9D6ED239271E6BD600D773CD /* SpeechForwarder.swift */,
+				9DD8905E27726C140084A894 /* ListenerGS Icon.pxm */,
 				9D51566326A36F530075EBC7 /* BinUtils */,
 				9D51563626A36AD60075EBC7 /* SwiftSocket */,
 				9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */,
