@@ -18,7 +18,7 @@ struct DestinationsView: View {
     var body: some View {
         List {
             ForEach(destinations.dests) { destination in
-                NavigationLink(destination: Text(destination.ipAddress)) {
+                NavigationLink(destination: GSView(ipAddress: destination.ipAddress)) {
                     Text(destination.ipAddress)
                 }
             }
