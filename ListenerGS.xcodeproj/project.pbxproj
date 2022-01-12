@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9D5155F326A1EF7B0075EBC7 /* ListenerGSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */; };
-		9D5155F526A1EF7B0075EBC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5155F426A1EF7B0075EBC7 /* ContentView.swift */; };
 		9D5155F726A1EF7C0075EBC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */; };
 		9D5155FA26A1EF7C0075EBC7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D5155F926A1EF7C0075EBC7 /* Preview Assets.xcassets */; };
 		9D51560526A1EF7C0075EBC7 /* ListenerGSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51560426A1EF7C0075EBC7 /* ListenerGSTests.swift */; };
@@ -52,7 +51,6 @@
 		9D0DC15826F2E47A007EB92D /* ListenerGS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ListenerGS.entitlements; sourceTree = "<group>"; };
 		9D5155EF26A1EF7B0075EBC7 /* ListenerGS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListenerGS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerGSApp.swift; sourceTree = "<group>"; };
-		9D5155F426A1EF7B0075EBC7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9D5155F926A1EF7C0075EBC7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9D5155FB26A1EF7C0075EBC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -142,7 +140,6 @@
 				9DD67CEF2728F5B700243FC6 /* DestinationsView.swift */,
 				9DCCDACB271FB87100F311DF /* GSDestinations.swift */,
 				9DD8905F2772D3B20084A894 /* GSView.swift */,
-				9D5155F426A1EF7B0075EBC7 /* ContentView.swift */,
 				9D6ED239271E6BD600D773CD /* SpeechForwarder.swift */,
 				9DD8905E27726C140084A894 /* ListenerGS Icon.pxm */,
 				9D51566326A36F530075EBC7 /* BinUtils */,
@@ -375,7 +372,6 @@
 				9D51565326A36B410075EBC7 /* yudpsocket.c in Sources */,
 				9DD890602772D3B20084A894 /* GSView.swift in Sources */,
 				9D51565226A36B410075EBC7 /* Result.swift in Sources */,
-				9D5155F526A1EF7B0075EBC7 /* ContentView.swift in Sources */,
 				9D6ED23A271E6BD600D773CD /* SpeechForwarder.swift in Sources */,
 				9D5155F326A1EF7B0075EBC7 /* ListenerGSApp.swift in Sources */,
 				9D51566526A36F6D0075EBC7 /* BinUtils.swift in Sources */,

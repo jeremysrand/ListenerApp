@@ -6,16 +6,13 @@
 //
 
 import Foundation
-
+import os
 import Speech
 
 class SpeechForwarder : ObservableObject {
     @Published var listening = false
-    @Published var listenEnabled = false
-    @Published var log = ""
-    @Published var ipAddress = ""
+    @Published var connected = false
     private var textHeard = ""
-    @Published var isEditing = false
     
     let LISTEN_STATE_MSG = 1
     let LISTEN_TEXT_MSG = 2
@@ -31,28 +28,32 @@ class SpeechForwarder : ObservableObject {
     
     private let audioEngine = AVAudioEngine()
     
-    func logError(message: String) {
-        log.append("ERROR: " + message + "\n")
-    }
+    private let logger = Logger()
     
-    func logEvent(message: String) {
-        log.append("EVENT: " + message + "\n")
-    }
-    
-    func validate(destination : String) {
-        logEvent(message: "Attempting to connect to " + destination)
+    func connect(destination : String) {
+        logger.debug("Attempting to connect to \(destination)")
         client = TCPClient(address: destination, port: Int32(port))
         guard let client = client else { return }
         switch client.connect(timeout: 10) {
         case .success:
-            listenEnabled = true
-            logEvent(message: "Connected to " + destination)
+            connected = true
+            logger.debug("Connected to \(destination)")
         case .failure(let error):
             client.close()
             self.client = nil
-            logError(message: String(describing: error))
+            logger.error("Failed to connect to \(destination): \(String(describing: error))")
             break
         }
+    }
+    
+    func disconnect() {
+        if (listening) {
+            listen()
+        }
+        
+        guard let client = client else { return }
+        client.close()
+        connected = false
     }
     
     func listen() {
@@ -94,14 +95,14 @@ class SpeechForwarder : ObservableObject {
                     break
                 case .failure(let error):
                     self.listening = false
-                    logError(message: String(describing: error))
+                    logger.error("Unable to send header: \(String(describing: error))")
             }
         }
         
         if (self.listening) {
             do {
                 try startRecording()
-                logEvent(message: "Listening...")
+                logger.debug("Started listening")
             }
             catch {
                 self.listening = false
@@ -109,7 +110,7 @@ class SpeechForwarder : ObservableObject {
         }
         
         if (!self.listening) {
-            logEvent(message: "Listening stopped")
+            logger.debug("Stopped listening")
             audioEngine.stop()
             recognitionRequest?.endAudio()
             switch (client.send(data: isListening())) {
@@ -117,7 +118,7 @@ class SpeechForwarder : ObservableObject {
                     break
                 case .failure(let error):
                     self.listening = false
-                    logError(message: String(describing: error))
+                    logger.error("Failed to send header: \(String(describing: error))")
             }
         }
     }
@@ -147,11 +148,11 @@ class SpeechForwarder : ObservableObject {
             switch (client.send(data: pack("<hh\(stringToSend.count)s", [LISTEN_TEXT_MSG, stringToSend.count, stringToSend]))) {
                 case .success:
                     self.textHeard = latestText
-                    logEvent(message: "Sent \"" + stringToSend + "\"")
+                    logger.debug("Sent text \"\(stringToSend)\"")
                     break
                 case .failure(let error):
                     self.listening = false
-                    logError(message: String(describing: error))
+                    logger.error("Failed to send text: \(String(describing: error))")
             }
         }
     }
@@ -200,9 +201,14 @@ class SpeechForwarder : ObservableObject {
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 self.listening = false
-                self.logEvent(message: "Listening stopped")
+                self.logger.debug("Stopped listening")
                 guard let client = self.client else { return }
-                client.send(data: self.isListening())
+                switch (client.send(data: self.isListening())) {
+                    case .success:
+                        break
+                    case .failure(let error):
+                        self.logger.error("Failed to send header: \(String(describing: error))")
+                }
             }
         }
 

@@ -43,19 +43,28 @@ private extension GSButtonStyle {
 
 struct GSView: View {
     private let ipAddress : String
+    @StateObject private var speechForwarder = SpeechForwarder()
     
     var body: some View {
         VStack {
-            Button("\(Image(systemName: "desktopcomputer.and.arrow.down"))  Connect to \(ipAddress)") {
-                print("Clicked connect")
+            Button(speechForwarder.connected ?
+                   "\(Image(systemName: "desktopcomputer.trianglebadge.exclamationmark"))  Disconnect from \(ipAddress)" :
+                   "\(Image(systemName: "desktopcomputer.and.arrow.down"))  Connect to \(ipAddress)") {
+                if (speechForwarder.connected) {
+                    speechForwarder.disconnect()
+                } else {
+                    speechForwarder.connect(destination: ipAddress)
+                }
             }
             .disabled(false)
             .buttonStyle(GSButtonStyle())
             
-            Button("\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
-                print("Clicked listen")
+            Button(speechForwarder.listening ?
+                   "\(Image(systemName: "ear.trianglebadge.exclamationmark"))  Stop Listening" :
+                   "\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
+                speechForwarder.listen()
             }
-            .disabled(true)
+            .disabled(!speechForwarder.connected)
             .buttonStyle(GSButtonStyle())
             
             Spacer()
