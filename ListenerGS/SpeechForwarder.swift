@@ -12,7 +12,7 @@ import Speech
 class SpeechForwarder : ObservableObject {
     @Published var listening = false
     @Published var connected = false
-    private var textHeard = ""
+    @Published var textHeard = ""
     
     let LISTEN_STATE_MSG = 1
     let LISTEN_TEXT_MSG = 2
@@ -20,7 +20,7 @@ class SpeechForwarder : ObservableObject {
     let port = 19026
     private var client: TCPClient?
     
-    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: Locale.preferredLanguages[0]))!
     
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     
@@ -144,15 +144,24 @@ class SpeechForwarder : ObservableObject {
         
         if (stringToSend.count > 0) {
             // TODO - Handle strings to send that are longer than 64K (doubt that would happen though)
-            // TODO - Try to convert encoding from utf8 to something the GS can understand.
-            switch (client.send(data: pack("<hh\(stringToSend.count)s", [LISTEN_TEXT_MSG, stringToSend.count, stringToSend]))) {
-                case .success:
-                    self.textHeard = latestText
-                    logger.debug("Sent text \"\(stringToSend)\"")
-                    break
-                case .failure(let error):
-                    self.listening = false
-                    logger.error("Failed to send text: \(String(describing: error))")
+            let nsEnc = CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(CFStringBuiltInEncodings.macRoman.rawValue))
+            let encoding = String.Encoding(rawValue: nsEnc) // String.Encoding
+            if let bytes = stringToSend.data(using: encoding) {
+                switch (client.send(data: pack("<hh", [LISTEN_TEXT_MSG, bytes.count]))) {
+                    case .success:
+                        switch (client.send(data: bytes)) {
+                            case .success:
+                                self.textHeard = latestText
+                                logger.debug("Sent text \"\(stringToSend)\"")
+                                break
+                            case .failure(let error):
+                                self.listening = false
+                                logger.error("Failed to send text: \(String(describing: error))")
+                        }
+                    case .failure(let error):
+                        self.listening = false
+                        logger.error("Failed to send text: \(String(describing: error))")
+                }
             }
         }
     }
