@@ -113,6 +113,9 @@ class SpeechForwarder : ObservableObject {
             logger.debug("Stopped listening")
             audioEngine.stop()
             recognitionRequest?.endAudio()
+            recognitionTask?.cancel()
+            audioEngine.inputNode.removeTap(onBus: 0);
+            audioEngine.inputNode.reset()
             switch (client.send(data: isListening())) {
                 case .success:
                     break
@@ -177,6 +180,12 @@ class SpeechForwarder : ObservableObject {
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
+        
+        // Configure the microphone input.
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+            self.recognitionRequest?.append(buffer)
+        }
 
         // Create and configure the speech recognition request.
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -202,6 +211,10 @@ class SpeechForwarder : ObservableObject {
                 print("Text \(result.bestTranscription.formattedString)")
             }
             
+            if error != nil {
+                self.logger.error("Error from recognizer: \(String(describing: error))")
+            }
+            
             if error != nil || isFinal {
                 // Stop recognizing speech if there is a problem.
                 self.audioEngine.stop()
@@ -219,12 +232,6 @@ class SpeechForwarder : ObservableObject {
                         self.logger.error("Failed to send header: \(String(describing: error))")
                 }
             }
-        }
-
-        // Configure the microphone input.
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-            self.recognitionRequest?.append(buffer)
         }
         
         audioEngine.prepare()
