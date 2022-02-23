@@ -52,7 +52,7 @@ struct GSView: View {
                         speechForwarder.connect(destination: ipAddress)
                     }
                 }
-                .disabled(false)
+                .disabled(speechForwarder.connecting)
                 .buttonStyle(GSButtonStyle())
                 
                 Button(speechForwarder.listening ?
@@ -60,7 +60,7 @@ struct GSView: View {
                        "\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
                     speechForwarder.listen()
                 }
-                .disabled(!speechForwarder.connected)
+                       .disabled((!speechForwarder.connected) || (!speechForwarder.listening && speechForwarder.sending))
                 .buttonStyle(GSButtonStyle())
             }
             .fixedSize(horizontal: true, vertical: false)
