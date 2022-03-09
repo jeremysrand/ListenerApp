@@ -283,11 +283,7 @@ class SpeechForwarder : ObservableObject {
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
         recognitionRequest.shouldReportPartialResults = true
-        
-        // Keep speech recognition data on device
-        if #available(iOS 13, *) {
-            recognitionRequest.requiresOnDeviceRecognition = false
-        }
+        recognitionRequest.requiresOnDeviceRecognition = false
         
         self.textHeard = ""
         self.latestText = ""
