@@ -4,7 +4,7 @@ This is an iOS app that connects to an Apple IIgs over a network and streams tex
 
 ## Obtaining a Copy
 
-I am not sure about distribution of this app yet.  I will probably attempt to have it approved for distribution on the AppStore but there is a chance (maybe a good chance) that it will not be allowed.  I believe this code should also work as a Mac application and that platform does allow distribution ouotside of the Mac AppStore so that is a fallback strategy.  But I think using the iPhone as a voice accessory to your Apple IIgs is the best solution so I would like it on iOS.  The code is here so if you have Xcode, you can build this and install it on your own devices I think.  More information to come.
+I am getting close to making this available as a release that anyone can obtain.  It is currently in beta test and the iOS and macOS app have passed Apple's beta testing review.  That doesn't mean that the app will pass full review but I am hopeful.  So, perhaps soon I will be able to provide a link for where to download this for yourself.
 
 ## Some Technical Details
 
@@ -15,4 +15,4 @@ It also uses [BinUtils](https://github.com/nst/BinUtils) for packing/unpacking s
 
 ## Warning
 
-This is my first from scratch application in Swift and in SwiftUI and it shows.  I know this code is crufty and bad, even as an inexperienced Swift coder.  It was created as part of the KansasFest 2021 HackFest contest so I only had so much time for code cleanup.  I plan to improve the code and the UI in the future.
+This is my first from scratch application in Swift and in SwiftUI and it shows.  I know this code is crufty and bad, even as an inexperienced Swift coder.  It was created as part of the KansasFest 2021 HackFest contest so I only had so much time for code cleanup.  Since then, I have done a bunch of cleanup and things are better.  But I am still not happy with how the code handles the network reads and writes.  A producer/consumer approach where the speech recognizer produces text and the network code consumes that text would be better.  But Apple just changed the multithreading approach in Swift this past year and I am not sure the best way to structure that.  Be patient as this old dog tries to learn some new tricks.
