@@ -120,6 +120,7 @@ int ytcpsocket_pull(int socketfd, char *data, int len, int timeout_sec) {
             return ret; // select-call failed or timeout occurred (before anything was sent)
         }
     }
+    ytcpsocket_set_block(socketfd, (timeout_sec < 0));
     // use loop to make sure receive all data
     do {
         readlen = (int)read(socketfd, data + datalen, len - datalen);

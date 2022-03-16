@@ -38,36 +38,61 @@ private extension GSButtonStyle {
 
 struct GSView: View {
     private let ipAddress : String
-    @StateObject private var speechForwarder = SpeechForwarder()
+    @StateObject private var connection = GSConnection()
     
     var body: some View {
         VStack {
             VStack {
-                Button(speechForwarder.connected ?
-                       "\(Image(systemName: "desktopcomputer.trianglebadge.exclamationmark"))  Disconnect from \(ipAddress)" :
-                       "\(Image(systemName: "desktopcomputer.and.arrow.down"))  Connect to \(ipAddress)") {
-                    if (speechForwarder.connected) {
-                        speechForwarder.disconnect()
-                    } else {
-                        speechForwarder.connect(destination: ipAddress)
+                switch (connection.state) {
+                case .disconnected:
+                    Button("\(Image(systemName: "desktopcomputer.and.arrow.down"))  Connect to \(ipAddress)") {
+                        connection.connect(destination: ipAddress)
                     }
+                    .buttonStyle(GSButtonStyle())
+                    
+                case .connecting:
+                    Button("\(Image(systemName: "desktopcomputer.and.arrow.down"))  Connecting to \(ipAddress)") {
+                    }
+                    .disabled(true)
+                    .buttonStyle(GSButtonStyle())
+                    
+                case .connected, .listening, .stoplistening:
+                    Button("\(Image(systemName: "desktopcomputer.trianglebadge.exclamationmark"))  Disconnect from \(ipAddress)") {
+                        connection.disconnect()
+                    }
+                    .disabled(connection.state != .connected)
+                    .buttonStyle(GSButtonStyle())
                 }
-                .disabled(speechForwarder.connecting)
-                .buttonStyle(GSButtonStyle())
                 
-                Button(speechForwarder.listening ?
-                       "\(Image(systemName: "ear.trianglebadge.exclamationmark"))  Stop Listening" :
-                       "\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
-                    speechForwarder.listen()
+                switch (connection.state)
+                {
+                case .disconnected, .stoplistening, .connecting:
+                    Button("\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
+                    }
+                    .disabled(true)
+                    .buttonStyle(GSButtonStyle())
+                    
+                case .connected:
+                    Button("\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
+                        connection.listen(speechForwarder: SpeechForwarder(connection: connection))
+                    }
+                    .buttonStyle(GSButtonStyle())
+                    
+                case .listening:
+                    Button("\(Image(systemName: "ear.trianglebadge.exclamationmark"))  Stop Listening") {
+                        connection.stopListening()
+                    }
+                    .buttonStyle(GSButtonStyle())
                 }
-                       .disabled((!speechForwarder.connected) || (!speechForwarder.listening && speechForwarder.sending))
-                .buttonStyle(GSButtonStyle())
             }
             .fixedSize(horizontal: true, vertical: false)
             .navigationBarTitle(ipAddress)
         }
+        .alert(item: $connection.errorMessage) { errorMessage in
+            Alert(title:Text(errorMessage.title), message: Text(errorMessage.message))
+        }
         
-        Text(speechForwarder.textHeard)
+        Text(connection.textHeard)
             .truncationMode(.head)
             .lineLimit(15)
             .padding()
