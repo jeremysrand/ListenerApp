@@ -11,8 +11,6 @@ import Speech
 
 class SpeechForwarder : SpeechForwarderProtocol {
     
-    private var connection : GSConnection
-    
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: Locale.preferredLanguages[0]))!
     
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -23,11 +21,7 @@ class SpeechForwarder : SpeechForwarderProtocol {
     
     private let logger = Logger()
     
-    init(connection : GSConnection) {
-        self.connection = connection
-    }
-    
-    func startListening() -> Bool {
+    func startListening(connection : GSConnection) -> Bool {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             OperationQueue.main.addOperation {
                 switch authStatus {
@@ -35,16 +29,16 @@ class SpeechForwarder : SpeechForwarderProtocol {
                     break
                         
                 case .denied, .restricted, .notDetermined:
-                    self.connection.stopListening()
+                    connection.stopListening()
                     
                 default:
-                    self.connection.stopListening()
+                    connection.stopListening()
                 }
             }
         }
             
         do {
-            try startRecording()
+            try startRecording(connection: connection)
             logger.debug("Started listening")
         }
         catch {
@@ -64,7 +58,7 @@ class SpeechForwarder : SpeechForwarderProtocol {
         recognitionTask = nil
     }
     
-    private func startRecording() throws {
+    private func startRecording(connection : GSConnection) throws {
         
         // Cancel the previous task if it's running.
         recognitionTask?.cancel()
@@ -95,18 +89,17 @@ class SpeechForwarder : SpeechForwarderProtocol {
             
             if let result = result {
                 // Update the text view with the results.
-                OperationQueue.main.addOperation { self.connection.set(text: result.bestTranscription.formattedString) }
+                OperationQueue.main.addOperation { connection.set(text: result.bestTranscription.formattedString) }
                 isFinal = result.isFinal
             }
             
             if error != nil {
                 self.logger.error("Error from recognizer: \(String(describing: error))")
-                self.connection.errorOccurred(title: "Recognizer Error", message: "Speech recognizer failed with an error")
             }
             
             if error != nil || isFinal {
                 OperationQueue.main.addOperation {
-                    self.connection.stopListening()
+                    connection.stopListening()
                 }
             }
         }

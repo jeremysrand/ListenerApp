@@ -17,17 +17,335 @@ class ListenerGSTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func waitForConnection(connection: GSConnection) {
+        for _ in (1...1000) {
+            if (connection.state != .connecting) {
+                return
+            }
+            usleep(10000)
+        }
     }
+    
+    func testNoConnection() throws {
+        let connection = GSConnection()
+        connection.setMainQueueForTest()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        connection.connect(destination: "127.0.0.1")
+        connection.waitForReadQueue()
+        connection.waitForMain()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNotNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+    }
+    
+    func testNormalPath() throws {
+        let connection = GSConnection()
+        connection.setMainQueueForTest()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let server = GSServerMock()
+        
+        connection.connect(destination: "127.0.0.1")
+        XCTAssertEqual(connection.state, .connecting)
+        XCTAssert(server.accept())
+        
+        XCTAssert(server.hasClient())
+        connection.waitForMain()
+        waitForConnection(connection: connection)
+        
+        XCTAssertEqual(connection.state, .connected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let speechForwarder = SpeechForwarderMock()
+        XCTAssert(!speechForwarder.isListening)
+        
+        connection.listen(speechForwarder: speechForwarder)
+        XCTAssert(server.getListenState(isListening: true))
+        connection.waitForMain()
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        connection.set(text: "Hello, world!")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, world!")
+        
+        XCTAssertEqual(server.getText(), "Hello, world!")
+        
+        connection.set(text: "Rewrite everything...")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Rewrite everything...")
+        
+        connection.set(text: "Hello, everyone!")
+        connection.stopListening()
+        
+        XCTAssert(!speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .stoplistening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, everyone!")
+        
+        XCTAssert(server.sendMore())
+        XCTAssertEqual(server.getText(), "\u{7f}\u{7f}\u{7f}\u{7f}\u{7f}\u{7f}everyone!")
+        
+        connection.waitForWriteQueue()
+        connection.waitForMain()
+        XCTAssert(server.getListenState(isListening: false))
+        
+        XCTAssertEqual(connection.state, .connected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, everyone!")
+        
+        server.disconnect()
+        connection.waitForReadQueue()
+        connection.waitForMain()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, everyone!")
+    }
+    
+    func testDisconnectWhileListening() throws {
+        let connection = GSConnection()
+        connection.setMainQueueForTest()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let server = GSServerMock()
+        
+        connection.connect(destination: "127.0.0.1")
+        XCTAssertEqual(connection.state, .connecting)
+        XCTAssert(server.accept())
+        
+        XCTAssert(server.hasClient())
+        connection.waitForMain()
+        
+        waitForConnection(connection: connection)
+        XCTAssertEqual(connection.state, .connected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let speechForwarder = SpeechForwarderMock()
+        XCTAssert(!speechForwarder.isListening)
+        
+        connection.listen(speechForwarder: speechForwarder)
+        XCTAssert(server.getListenState(isListening: true))
+        connection.waitForMain()
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        connection.set(text: "Hello, world!")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, world!")
+        
+        XCTAssertEqual(server.getText(), "Hello, world!")
+        
+        connection.set(text: "Rewrite everything...")
+        connection.disconnect()
+        connection.waitForAllQueues()
+        
+        XCTAssert(!speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Rewrite everything...")
+        
+        XCTAssert(server.getDisconnect())
+    }
+    
+    func testBadSendMore() throws {
+        let connection = GSConnection()
+        connection.setMainQueueForTest()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let server = GSServerMock()
+        
+        connection.connect(destination: "127.0.0.1")
+        XCTAssertEqual(connection.state, .connecting)
+        XCTAssert(server.accept())
+        
+        XCTAssert(server.hasClient())
+        connection.waitForMain()
+        
+        waitForConnection(connection: connection)
+        XCTAssertEqual(connection.state, .connected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let speechForwarder = SpeechForwarderMock()
+        XCTAssert(!speechForwarder.isListening)
+        
+        connection.listen(speechForwarder: speechForwarder)
+        XCTAssert(server.getListenState(isListening: true))
+        connection.waitForMain()
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        connection.set(text: "Hello, world!")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, world!")
+        
+        XCTAssertEqual(server.getText(), "Hello, world!")
+        
+        connection.set(text: "Rewrite everything...")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Rewrite everything...")
+        
+        connection.set(text: "Hello, everyone!")
+        connection.stopListening()
+        
+        XCTAssert(!speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .stoplistening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, everyone!")
+        
+        XCTAssert(server.sendMoreBad())
+        
+        connection.waitForAllQueues()
+        XCTAssert(server.getDisconnect())
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNotNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, everyone!")
+    }
+    
+    func testServerDisconnect() throws {
+        let connection = GSConnection()
+        connection.setMainQueueForTest()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let server = GSServerMock()
+        
+        connection.connect(destination: "127.0.0.1")
+        XCTAssertEqual(connection.state, .connecting)
+        XCTAssert(server.accept())
+        
+        XCTAssert(server.hasClient())
+        connection.waitForMain()
+        
+        waitForConnection(connection: connection)
+        XCTAssertEqual(connection.state, .connected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        server.disconnect()
+        connection.waitForReadQueue()
+        connection.waitForMain()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+    }
+    
+    func testServerDisconnectionWhileListening() throws {
+        let connection = GSConnection()
+        connection.setMainQueueForTest()
+        
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let server = GSServerMock()
+        
+        connection.connect(destination: "127.0.0.1")
+        XCTAssertEqual(connection.state, .connecting)
+        XCTAssert(server.accept())
+        
+        XCTAssert(server.hasClient())
+        connection.waitForMain()
+        
+        waitForConnection(connection: connection)
+        XCTAssertEqual(connection.state, .connected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        let speechForwarder = SpeechForwarderMock()
+        XCTAssert(!speechForwarder.isListening)
+        
+        connection.listen(speechForwarder: speechForwarder)
+        XCTAssert(server.getListenState(isListening: true))
+        connection.waitForMain()
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "")
+        
+        connection.set(text: "Hello, world!")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, world!")
+        
+        XCTAssertEqual(server.getText(), "Hello, world!")
+        
+        connection.set(text: "Rewrite everything...")
+        
+        XCTAssert(speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .listening)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Rewrite everything...")
+        
+        connection.set(text: "Hello, everyone!")
+        server.disconnect()
+        connection.waitForAllQueues()
+        
+        XCTAssert(!speechForwarder.isListening)
+        XCTAssertEqual(connection.state, .disconnected)
+        XCTAssertNil(connection.errorMessage)
+        XCTAssertEqual(connection.textHeard, "Hello, everyone!")
+    }
+    
+    // Other tests:
+    //   - Connection deconstruction - When I remove the reference to the connection, it stays up.  I think self has references because of closures that are still running in the queues.
 
+    /*
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {
             // Put the code you want to measure the time of here.
         }
     }
+    */
 
 }

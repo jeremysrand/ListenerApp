@@ -74,7 +74,7 @@ struct GSView: View {
                     
                 case .connected:
                     Button("\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
-                        connection.listen(speechForwarder: SpeechForwarder(connection: connection))
+                        connection.listen(speechForwarder: SpeechForwarder())
                     }
                     .buttonStyle(GSButtonStyle())
                     

@@ -42,7 +42,7 @@ extension GSConnectionState: CustomStringConvertible
 
 protocol SpeechForwarderProtocol
 {
-    func startListening() -> Bool
+    func startListening(connection: GSConnection) -> Bool
     func stopListening()
 }
 
@@ -53,11 +53,12 @@ class GSConnection : ObservableObject {
     
     var speechForwarder : SpeechForwarderProtocol?
     
-    let LISTEN_STATE_MSG = 1
-    let LISTEN_TEXT_MSG = 2
-    let LISTEN_SEND_MORE = 3
+    static let LISTEN_STATE_MSG = 1
+    static let LISTEN_TEXT_MSG = 2
+    static let LISTEN_SEND_MORE = 3
     
-    let port = 19026
+    static let port = 19026
+    
     private var destination = ""
     private var client: TCPClient?
     
@@ -65,14 +66,15 @@ class GSConnection : ObservableObject {
     
     private let readQueue = OperationQueue()
     private let writeQueue = OperationQueue()
+    private var mainQueue = OperationQueue.main
     
     private var condition = NSCondition()
-    private var stopListeningFlag = false
     private var canSend = true
     
-    func changeState(newState : GSConnectionState)
+    private func changeState(newState : GSConnectionState)
     {
-        if (state == newState) {
+        let oldState = state
+        if (oldState == newState) {
             return;
         }
         
@@ -80,24 +82,24 @@ class GSConnection : ObservableObject {
         switch (newState)
         {
         case .disconnected:
-            legalTransition = ((state == .connected) || (state == .connecting))
+            legalTransition = ((oldState == .connected) || (oldState == .connecting) || (oldState == .stoplistening))
             
         case .connecting:
-            legalTransition = (state == .disconnected)
+            legalTransition = (oldState == .disconnected)
             
         case .connected:
-            legalTransition = ((state == .connecting) || (state == .listening) || (state == .stoplistening))
+            legalTransition = ((oldState == .connecting) || (oldState == .listening) || (oldState == .stoplistening))
             
         case .listening:
-            legalTransition = (state == .connected)
+            legalTransition = (oldState == .connected)
             
         case .stoplistening:
-            legalTransition = ((state == .connected) || (state == .listening))
+            legalTransition = ((oldState == .connected) || (oldState == .listening))
         }
         
         if (!legalTransition) {
-            logger.error("Illegal requested state transition from \(self.state) to \(newState)")
-            errorOccurred(title: "Bad State Change", message: "Illegal state transition from \(self.state) to \(newState)")
+            logger.error("Illegal requested state transition from \(oldState) to \(newState)")
+            errorOccurred(title: "Bad State Change", message: "Illegal state transition from \(oldState) to \(newState)")
         } else {
             state = newState
         }
@@ -105,7 +107,7 @@ class GSConnection : ObservableObject {
     
     func errorOccurred(title: String, message : String)
     {
-        OperationQueue.main.addOperation {
+        mainQueue.addOperation {
             self.errorMessage = GSConnectionErrorMessage(title: title, message: message)
         }
     }
@@ -123,19 +125,19 @@ class GSConnection : ObservableObject {
     
     private func doConnect() {
         logger.debug("Attempting to connect to \(self.destination)")
-        client = TCPClient(address: destination, port: Int32(port))
+        client = TCPClient(address: destination, port: Int32(GSConnection.port))
         guard let client = client else {
-            OperationQueue.main.addOperation { self.connectionFailed() }
+            mainQueue.addOperation { self.connectionFailed() }
             return
         }
         switch client.connect(timeout: 10) {
         case .success:
-            OperationQueue.main.addOperation { self.connectionSuccessful() }
+            mainQueue.addOperation { self.connectionSuccessful() }
         case .failure(let error):
             client.close()
             self.client = nil
             logger.error("Failed to connect to \(self.destination): \(String(describing: error))")
-            OperationQueue.main.addOperation { self.connectionFailed() }
+            mainQueue.addOperation { self.connectionFailed() }
             return
         }
         
@@ -143,10 +145,15 @@ class GSConnection : ObservableObject {
             guard let byteArray = client.read(2) else {
                 break
             }
+            
+            if (byteArray.count != 2) {
+                break
+            }
+            
             let data = Data(byteArray)
             do {
                 let unpacked = try unpack("<h", data)
-                if (unpacked[0] as? Int == LISTEN_SEND_MORE) {
+                if (unpacked[0] as? Int == GSConnection.LISTEN_SEND_MORE) {
                     condition.lock()
                     canSend = true
                     condition.broadcast()
@@ -166,7 +173,7 @@ class GSConnection : ObservableObject {
         
         client.close()
         self.client = nil
-        OperationQueue.main.addOperation { self.disconnect() }
+        mainQueue.addOperation { self.disconnect() }
     }
     
     func connect(destination : String) {
@@ -193,6 +200,9 @@ class GSConnection : ObservableObject {
         }
         condition.broadcast()
         condition.unlock()
+        
+        waitForWriteQueue()
+        waitForReadQueue()
         self.changeState(newState:.disconnected)
     }
     
@@ -213,7 +223,7 @@ class GSConnection : ObservableObject {
     private func sendListenMsg(isListening: Bool) -> Bool {
         guard let client = client else { return false }
         
-        switch (client.send(data: pack("<hh", [LISTEN_STATE_MSG, isListening ? 1 : 0]))) {
+        switch (client.send(data: pack("<hh", [GSConnection.LISTEN_STATE_MSG, isListening ? 1 : 0]))) {
         case .success:
             break
         case .failure(let error):
@@ -232,9 +242,9 @@ class GSConnection : ObservableObject {
                 return
             }
             
-            OperationQueue.main.addOperation {
+            self.mainQueue.addOperation {
                 self.changeState(newState: .listening)
-                if (!speechForwarder.startListening()) {
+                if (!speechForwarder.startListening(connection: self)) {
                     self.logger.error("Unable to start listening")
                     self.errorOccurred(title: "Speech Error", message: "Unable to start listening for speech")
                     self.stopListening()
@@ -247,7 +257,7 @@ class GSConnection : ObservableObject {
             
             _ = self.sendListenMsg(isListening: false)
             
-            OperationQueue.main.addOperation {
+            self.mainQueue.addOperation {
                 if (self.state == .stoplistening) {
                     self.changeState(newState: .connected)
                 }
@@ -318,29 +328,51 @@ class GSConnection : ObservableObject {
         let nsEnc = CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(CFStringBuiltInEncodings.macRoman.rawValue))
         let encoding = String.Encoding(rawValue: nsEnc) // String.Encoding
         if let bytes = stringToSend.data(using: encoding) {
-            switch (client.send(data: pack("<hh", [LISTEN_TEXT_MSG, bytes.count]))) {
+            switch (client.send(data: pack("<hh", [GSConnection.LISTEN_TEXT_MSG, bytes.count]))) {
             case .success:
                 switch (client.send(data: bytes)) {
                 case .success:
                     logger.debug("Sent text \"\(stringToSend)\"")
                     break
                 case .failure(let error):
-                    OperationQueue.main.addOperation {
+                    mainQueue.addOperation {
                         self.errorOccurred(title: "Write Error", message: "Unable to send text to the GS")
-                        self.stopListening()
+                        self.disconnect()
                     }
                     logger.error("Failed to send text: \(String(describing: error))")
                     return false
                 }
             case .failure(let error):
-                OperationQueue.main.addOperation {
+                mainQueue.addOperation {
                     self.errorOccurred(title: "Write Error", message: "Unable to send text to the GS")
-                    self.stopListening()
+                    self.disconnect()
                 }
                 logger.error("Failed to send text: \(String(describing: error))")
             }
         }
         return true
+    }
+    
+    func setMainQueueForTest() {
+        mainQueue = OperationQueue()
+    }
+    
+    func waitForMain() {
+        mainQueue.waitUntilAllOperationsAreFinished()
+    }
+    
+    func waitForReadQueue() {
+        readQueue.waitUntilAllOperationsAreFinished()
+    }
+    
+    func waitForWriteQueue() {
+        writeQueue.waitUntilAllOperationsAreFinished()
+    }
+    
+    func waitForAllQueues() {
+        waitForWriteQueue()
+        waitForReadQueue()
+        waitForMain()
     }
 }
 

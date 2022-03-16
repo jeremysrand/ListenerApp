@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		9D05BAAA27DFDE6300D9CC4B /* GSConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D05BAA927DFDE6300D9CC4B /* GSConnection.swift */; };
+		9D2A6D1E27E235E400DF3D85 /* GSServerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D2A6D1D27E235E400DF3D85 /* GSServerMock.swift */; };
+		9D2A6D1F27E236D500DF3D85 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51564C26A36B410075EBC7 /* Result.swift */; };
+		9D2A6D2027E236D800DF3D85 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51565026A36B410075EBC7 /* Socket.swift */; };
+		9D2A6D2127E236DC00DF3D85 /* TCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51565126A36B410075EBC7 /* TCPClient.swift */; };
+		9D2A6D2227E236E000DF3D85 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D51564F26A36B410075EBC7 /* UDPClient.swift */; };
+		9D2A6D2327E236E400DF3D85 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D51564E26A36B410075EBC7 /* ytcpsocket.c */; };
+		9D2A6D2427E236FD00DF3D85 /* yudpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D51564D26A36B410075EBC7 /* yudpsocket.c */; };
+		9D2A6D2727E24BD600DF3D85 /* SpeechForwarderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D2A6D2627E24BD600DF3D85 /* SpeechForwarderMock.swift */; };
 		9D5155F326A1EF7B0075EBC7 /* ListenerGSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */; };
 		9D5155F726A1EF7C0075EBC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */; };
 		9D5155FA26A1EF7C0075EBC7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D5155F926A1EF7C0075EBC7 /* Preview Assets.xcassets */; };
@@ -51,6 +59,8 @@
 /* Begin PBXFileReference section */
 		9D05BAA927DFDE6300D9CC4B /* GSConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSConnection.swift; sourceTree = "<group>"; };
 		9D0DC15826F2E47A007EB92D /* ListenerGS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ListenerGS.entitlements; sourceTree = "<group>"; };
+		9D2A6D1D27E235E400DF3D85 /* GSServerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSServerMock.swift; sourceTree = "<group>"; };
+		9D2A6D2627E24BD600DF3D85 /* SpeechForwarderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechForwarderMock.swift; sourceTree = "<group>"; };
 		9D5155EF26A1EF7B0075EBC7 /* ListenerGS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListenerGS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D5155F226A1EF7B0075EBC7 /* ListenerGSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerGSApp.swift; sourceTree = "<group>"; };
 		9D5155F626A1EF7C0075EBC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -166,6 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				9D51560426A1EF7C0075EBC7 /* ListenerGSTests.swift */,
+				9D2A6D1D27E235E400DF3D85 /* GSServerMock.swift */,
+				9D2A6D2627E24BD600DF3D85 /* SpeechForwarderMock.swift */,
 				9D51560626A1EF7C0075EBC7 /* Info.plist */,
 			);
 			path = ListenerGSTests;
@@ -388,7 +400,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D2A6D2427E236FD00DF3D85 /* yudpsocket.c in Sources */,
+				9D2A6D2227E236E000DF3D85 /* UDPClient.swift in Sources */,
+				9D2A6D2027E236D800DF3D85 /* Socket.swift in Sources */,
+				9D2A6D2727E24BD600DF3D85 /* SpeechForwarderMock.swift in Sources */,
+				9D2A6D2127E236DC00DF3D85 /* TCPClient.swift in Sources */,
+				9D2A6D1F27E236D500DF3D85 /* Result.swift in Sources */,
+				9D2A6D1E27E235E400DF3D85 /* GSServerMock.swift in Sources */,
 				9D51560526A1EF7C0075EBC7 /* ListenerGSTests.swift in Sources */,
+				9D2A6D2327E236E400DF3D85 /* ytcpsocket.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +610,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VD9FGCW36C;
 				INFOPLIST_FILE = ListenerGSTests/Info.plist;
@@ -612,6 +633,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VD9FGCW36C;
 				INFOPLIST_FILE = ListenerGSTests/Info.plist;
