@@ -11,7 +11,7 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             DestinationsView()
-            EmptyView() // JSR_TODO - Maybe display some instructions here.
+            ListenerInfoView()
         }
     }
 }

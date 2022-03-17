@@ -10,8 +10,10 @@ I am getting close to making this available as a release that anyone can obtain.
 
 It relies on the [Speech Framework](https://developer.apple.com/documentation/speech) built into recent versions of iOS.
 
-This app uses [SwiftSocket v2.1.0](https://github.com/swiftsocket/SwiftSocket/tree/2.1.0) for opening the TCP connection to the Apple IIgs.
-It also uses [BinUtils](https://github.com/nst/BinUtils) for packing/unpacking structures on the TCP connection.
+This app uses:
+* [SwiftSocket v2.1.0](https://github.com/swiftsocket/SwiftSocket/tree/2.1.0) for opening the TCP connection to the Apple IIgs.
+* [BinUtils](https://github.com/nst/BinUtils) for packing/unpacking structures on the TCP connection.
+* [RichText v1.7.0](https://github.com/NuPlay/RichText/releases/tag/1.7.0) for displaying a nice startup screen on iPad and macOS.
 
 ## Warning
 
