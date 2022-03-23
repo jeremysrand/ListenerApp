@@ -29,9 +29,10 @@ will say it is waiting for a connection.
 </p>
 
 <p>
-In this app, tap the "+" button and enter the IP address or hostname of your Apple IIGS.  You can enter multiple IP
-addresses and hostnames if you have multiple machines.  Your destinations are synced through iCloud so if you have
-multiple modern devices, you should find the IP addresses are mirrored to those other devices.
+In this app, tap the "+" button (if you are on an iPad in portrait orientation, you may need to tap a "< GS Destinations"
+button to reveal the side bar and the "+" button) and enter the IP address or hostname of your Apple IIGS.  You can enter
+multiple IP addresses and hostnames if you have multiple machines.  Your destinations are synced through iCloud so if you
+have multiple modern devices, you should find the IP addresses are mirrored to those other devices.
 </p>
 
 <p>Select one of these destinations and tap the "Connect" button to bring up a network connection to your Apple IIGS.
