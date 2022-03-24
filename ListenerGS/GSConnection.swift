@@ -68,8 +68,8 @@ class GSConnection : ObservableObject {
     private let writeQueue = OperationQueue()
     private var mainQueue = OperationQueue.main
     
-    private var condition = NSCondition()
     private var canSend = true
+    private var lastSent = ""
     
     private func changeState(newState : GSConnectionState)
     {
@@ -154,10 +154,10 @@ class GSConnection : ObservableObject {
             do {
                 let unpacked = try unpack("<h", data)
                 if (unpacked[0] as? Int == GSConnection.LISTEN_SEND_MORE) {
-                    condition.lock()
-                    canSend = true
-                    condition.broadcast()
-                    condition.unlock()
+                    mainQueue.addOperation {
+                        self.canSend = true
+                        self.trySend()
+                    }
                 } else {
                     logger.error("Unexpected message on socket from \(self.destination)")
                     errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
@@ -193,13 +193,10 @@ class GSConnection : ObservableObject {
             stopListening()
         }
         
-        condition.lock()
         if (client != nil) {
             client!.close()
             self.client = nil
         }
-        condition.broadcast()
-        condition.unlock()
         
         waitForWriteQueue()
         waitForReadQueue()
@@ -212,12 +209,11 @@ class GSConnection : ObservableObject {
             speechForwarder.stopListening()
             self.speechForwarder = nil
         }
-        condition.lock()
+        
         if (state == .listening) {
             changeState(newState: .stoplistening)
-            condition.broadcast()
+            trySend()
         }
-        condition.unlock()
     }
     
     private func sendListenMsg(isListening: Bool) -> Bool {
@@ -236,6 +232,7 @@ class GSConnection : ObservableObject {
     
     func listen(speechForwarder: SpeechForwarderProtocol) {
         textHeard = ""
+        lastSent = ""
         writeQueue.addOperation {
             if (!self.sendListenMsg(isListening: true)) {
                 self.errorOccurred(title: "Write Error", message: "Unable to send data to the GS")
@@ -252,57 +249,39 @@ class GSConnection : ObservableObject {
                 }
                 self.speechForwarder = speechForwarder
             }
-            
-            self.send()
-            
-            _ = self.sendListenMsg(isListening: false)
-            
-            self.mainQueue.addOperation {
-                if (self.state == .stoplistening) {
-                    self.changeState(newState: .connected)
+        }
+    }
+    
+    private func trySend() {
+        if (textHeard == lastSent) {
+            if (state == .stoplistening) {
+                writeQueue.addOperation {
+                    _ = self.sendListenMsg(isListening: false)
+                }
+                changeState(newState: .connected)
+            }
+            return
+        }
+        
+        if (!canSend) {
+            return
+        }
+        
+        canSend = false
+        let stringToSend = textHeard
+        writeQueue.addOperation {
+            if self.send(latestText: stringToSend, lastSent: self.lastSent) {
+                self.mainQueue.addOperation {
+                    self.lastSent = stringToSend
+                    self.trySend()
                 }
             }
         }
     }
     
-    func set(text:String)
-    {
-        condition.lock()
+    func set(text:String) {
         textHeard = text
-        condition.broadcast()
-        condition.unlock()
-    }
-
-    private func send() {
-        var stringLastSent = ""
-        var stringToSend = ""
-        
-        while true {
-            condition.lock()
-            guard client != nil else {
-                condition.unlock()
-                return
-            }
-            if ((stringLastSent == textHeard) && (state == .stoplistening)) {
-                condition.unlock()
-                return
-            }
-            if ((!canSend) ||
-                (stringLastSent == textHeard)) {
-                condition.wait()
-                condition.unlock()
-                continue
-            }
-            stringToSend = textHeard
-            condition.unlock()
-            
-            if send(latestText: stringToSend, lastSent: stringLastSent) {
-                stringLastSent = stringToSend
-                condition.lock()
-                canSend = false
-                condition.unlock()
-            }
-        }
+        trySend()
     }
     
     private func send(latestText : String, lastSent: String) -> Bool {

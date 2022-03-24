@@ -103,9 +103,10 @@ class ListenerGSTests: XCTestCase {
         XCTAssertEqual(connection.textHeard, "Hello, everyone!")
         
         XCTAssert(server.sendMore())
+        connection.waitForMain()
+        connection.waitForWriteQueue()
         XCTAssertEqual(server.getText(), "\u{7f}\u{7f}\u{7f}\u{7f}\u{7f}\u{7f}everyone!")
         
-        connection.waitForWriteQueue()
         connection.waitForMain()
         XCTAssert(server.getListenState(isListening: false))
         
