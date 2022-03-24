@@ -123,64 +123,61 @@ class GSConnection : ObservableObject {
         logger.debug("Connected to \(self.destination)")
     }
     
-    private func doConnect() {
-        logger.debug("Attempting to connect to \(self.destination)")
-        client = TCPClient(address: destination, port: Int32(GSConnection.port))
-        guard let client = client else {
-            mainQueue.addOperation { self.connectionFailed() }
-            return
-        }
-        switch client.connect(timeout: 10) {
-        case .success:
-            mainQueue.addOperation { self.connectionSuccessful() }
-        case .failure(let error):
-            client.close()
-            self.client = nil
-            logger.error("Failed to connect to \(self.destination): \(String(describing: error))")
-            mainQueue.addOperation { self.connectionFailed() }
-            return
-        }
-        
-        while (true) {
-            guard let byteArray = client.read(2) else {
-                break
-            }
-            
-            if (byteArray.count != 2) {
-                break
-            }
-            
-            let data = Data(byteArray)
-            do {
-                let unpacked = try unpack("<h", data)
-                if (unpacked[0] as? Int == GSConnection.LISTEN_SEND_MORE) {
-                    mainQueue.addOperation {
-                        self.canSend = true
-                        self.trySend()
-                    }
-                } else {
-                    logger.error("Unexpected message on socket from \(self.destination)")
-                    errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
-                    break
-                }
-            }
-            catch {
-                logger.error("Unable to unpack message on socket from \(self.destination)")
-                errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
-                break
-            }
-        }
-        
-        client.close()
-        self.client = nil
-        mainQueue.addOperation { self.disconnect() }
-    }
-    
     func connect(destination : String) {
         self.destination = destination
         changeState(newState: .connecting)
-        readQueue.addOperation {
-            self.doConnect()
+        readQueue.addOperation { [weak self, destination] in
+            self?.logger.debug("Attempting to connect to \(destination)")
+            let client = TCPClient(address: destination, port: Int32(GSConnection.port))
+            switch client.connect(timeout: 10) {
+            case .success:
+                self?.mainQueue.addOperation {
+                    self?.client = client
+                    self?.connectionSuccessful()
+                }
+            case .failure(let error):
+                client.close()
+                self?.logger.error("Failed to connect to \(destination): \(String(describing: error))")
+                self?.mainQueue.addOperation {
+                    self?.connectionFailed()
+                }
+                return
+            }
+            
+            while (true) {
+                guard let byteArray = client.read(2) else {
+                    break
+                }
+                
+                if (byteArray.count != 2) {
+                    break
+                }
+                
+                guard let self = self else {
+                    break
+                }
+                let data = Data(byteArray)
+                do {
+                    let unpacked = try unpack("<h", data)
+                    if (unpacked[0] as? Int == GSConnection.LISTEN_SEND_MORE) {
+                        self.mainQueue.addOperation {
+                            self.canSend = true
+                            self.trySend()
+                        }
+                    } else {
+                        self.logger.error("Unexpected message on socket from \(destination)")
+                        self.errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
+                        break
+                    }
+                }
+                catch {
+                    self.logger.error("Unable to unpack message on socket from \(destination)")
+                    self.errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
+                    break
+                }
+            }
+            
+            self?.mainQueue.addOperation { self?.disconnect() }
         }
     }
     

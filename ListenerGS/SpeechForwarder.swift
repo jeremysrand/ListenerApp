@@ -53,6 +53,7 @@ class SpeechForwarder : SpeechForwarderProtocol {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         recognitionTask?.cancel()
+        recognitionTask?.finish()
 
         recognitionRequest = nil
         recognitionTask = nil
@@ -84,12 +85,15 @@ class SpeechForwarder : SpeechForwarderProtocol {
         
         // Create a recognition task for the speech recognition session.
         // Keep a reference to the task so that it can be canceled.
-        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
+        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak connection] result, error in
             var isFinal = false
             
             if let result = result {
                 // Update the text view with the results.
-                OperationQueue.main.addOperation { connection.set(text: result.bestTranscription.formattedString) }
+                OperationQueue.main.addOperation {
+                    guard let connection = connection else { return }
+                    connection.set(text: result.bestTranscription.formattedString)
+                }
                 isFinal = result.isFinal
             }
             
@@ -99,6 +103,7 @@ class SpeechForwarder : SpeechForwarderProtocol {
             
             if error != nil || isFinal {
                 OperationQueue.main.addOperation {
+                    guard let connection = connection else { return }
                     connection.stopListening()
                 }
             }

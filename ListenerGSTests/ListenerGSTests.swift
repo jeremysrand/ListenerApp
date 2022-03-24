@@ -337,8 +337,73 @@ class ListenerGSTests: XCTestCase {
         XCTAssertEqual(connection.textHeard, "Hello, everyone!")
     }
     
-    // Other tests:
-    //   - Connection deconstruction - When I remove the reference to the connection, it stays up.  I think self has references because of closures that are still running in the queues.
+    func testDestructWhileConnected() throws {
+        let server = GSServerMock()
+        
+        if (true) {
+            let connection = GSConnection()
+            connection.setMainQueueForTest()
+            
+            XCTAssertEqual(connection.state, .disconnected)
+            XCTAssertNil(connection.errorMessage)
+            XCTAssertEqual(connection.textHeard, "")
+            
+            connection.connect(destination: "127.0.0.1")
+            XCTAssertEqual(connection.state, .connecting)
+            XCTAssert(server.accept())
+            
+            XCTAssert(server.hasClient())
+            connection.waitForMain()
+            waitForConnection(connection: connection)
+            
+            XCTAssertEqual(connection.state, .connected)
+            XCTAssertNil(connection.errorMessage)
+            XCTAssertEqual(connection.textHeard, "")
+        }
+        
+        XCTAssert(server.getDisconnect())
+    }
+    
+    /* This test hangs at the getDisconnect() line at the end.  Something is holding a connection reference.
+    func testDestructWhileListening() throws {
+        let server = GSServerMock()
+        
+        if (true) {
+            let connection = GSConnection()
+            connection.setMainQueueForTest()
+            
+            XCTAssertEqual(connection.state, .disconnected)
+            XCTAssertNil(connection.errorMessage)
+            XCTAssertEqual(connection.textHeard, "")
+            
+            connection.connect(destination: "127.0.0.1")
+            XCTAssertEqual(connection.state, .connecting)
+            XCTAssert(server.accept())
+            
+            XCTAssert(server.hasClient())
+            connection.waitForMain()
+            waitForConnection(connection: connection)
+            
+            XCTAssertEqual(connection.state, .connected)
+            XCTAssertNil(connection.errorMessage)
+            XCTAssertEqual(connection.textHeard, "")
+            
+            let speechForwarder = SpeechForwarderMock()
+            XCTAssert(!speechForwarder.isListening)
+            
+            connection.listen(speechForwarder: speechForwarder)
+            XCTAssert(server.getListenState(isListening: true))
+            connection.waitForMain()
+            
+            XCTAssert(speechForwarder.isListening)
+            XCTAssertEqual(connection.state, .listening)
+            XCTAssertNil(connection.errorMessage)
+            XCTAssertEqual(connection.textHeard, "")
+        }
+        
+        XCTAssert(server.getDisconnect())
+    }
+     */
 
     /*
     func testPerformanceExample() throws {
