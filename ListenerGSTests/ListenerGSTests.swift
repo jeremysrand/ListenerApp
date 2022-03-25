@@ -364,7 +364,6 @@ class ListenerGSTests: XCTestCase {
         XCTAssert(server.getDisconnect())
     }
     
-    /* This test hangs at the getDisconnect() line at the end.  Something is holding a connection reference.
     func testDestructWhileListening() throws {
         let server = GSServerMock()
         
@@ -392,8 +391,9 @@ class ListenerGSTests: XCTestCase {
             XCTAssert(!speechForwarder.isListening)
             
             connection.listen(speechForwarder: speechForwarder)
-            XCTAssert(server.getListenState(isListening: true))
+            connection.waitForWriteQueue()
             connection.waitForMain()
+            XCTAssert(server.getListenState(isListening: true))
             
             XCTAssert(speechForwarder.isListening)
             XCTAssertEqual(connection.state, .listening)
@@ -403,7 +403,6 @@ class ListenerGSTests: XCTestCase {
         
         XCTAssert(server.getDisconnect())
     }
-     */
 
     /*
     func testPerformanceExample() throws {

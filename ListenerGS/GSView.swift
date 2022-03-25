@@ -56,7 +56,7 @@ struct GSView: View {
                     .disabled(true)
                     .buttonStyle(GSButtonStyle())
                     
-                case .connected, .listening, .stoplistening:
+                case .connected, .listening, .stoplistening, .deleting:
                     Button("\(Image(systemName: "desktopcomputer.trianglebadge.exclamationmark"))  Disconnect from \(ipAddress)") {
                         connection.disconnect()
                     }
@@ -66,7 +66,7 @@ struct GSView: View {
                 
                 switch (connection.state)
                 {
-                case .disconnected, .stoplistening, .connecting:
+                case .disconnected, .stoplistening, .connecting, .deleting:
                     Button("\(Image(systemName: "ear.and.waveform"))  Listen and Send Text") {
                     }
                     .disabled(true)

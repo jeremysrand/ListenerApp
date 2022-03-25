@@ -20,6 +20,7 @@ enum GSConnectionState {
     case connected
     case listening
     case stoplistening
+    case deleting
 }
 
 extension GSConnectionState: CustomStringConvertible
@@ -36,6 +37,8 @@ extension GSConnectionState: CustomStringConvertible
             return "listening"
         case .stoplistening:
             return "stop listening"
+        case .deleting:
+            return "deleting"
         }
     }
 }
@@ -95,6 +98,9 @@ class GSConnection : ObservableObject {
             
         case .stoplistening:
             legalTransition = ((oldState == .connected) || (oldState == .listening))
+        
+        case .deleting:
+            legalTransition = true
         }
         
         if (!legalTransition) {
@@ -182,6 +188,7 @@ class GSConnection : ObservableObject {
     }
     
     deinit {
+        changeState(newState:.deleting)
         disconnect()
     }
     
@@ -197,7 +204,10 @@ class GSConnection : ObservableObject {
         
         waitForWriteQueue()
         waitForReadQueue()
-        self.changeState(newState:.disconnected)
+        
+        if (state != .deleting) {
+            changeState(newState:.disconnected)
+        }
     }
     
     func stopListening() {
@@ -230,7 +240,8 @@ class GSConnection : ObservableObject {
     func listen(speechForwarder: SpeechForwarderProtocol) {
         textHeard = ""
         lastSent = ""
-        writeQueue.addOperation {
+        writeQueue.addOperation { [weak self] in
+            guard let self = self else { return }
             if (!self.sendListenMsg(isListening: true)) {
                 self.errorOccurred(title: "Write Error", message: "Unable to send data to the GS")
                 return

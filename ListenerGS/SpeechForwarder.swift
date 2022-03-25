@@ -21,6 +21,8 @@ class SpeechForwarder : SpeechForwarderProtocol {
     
     private let logger = Logger()
     
+    private let audioQueue = DispatchQueue.global()
+    
     func startListening(connection : GSConnection) -> Bool {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             OperationQueue.main.addOperation {
@@ -71,17 +73,41 @@ class SpeechForwarder : SpeechForwarderProtocol {
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
         
-        // Configure the microphone input.
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-            self.recognitionRequest?.append(buffer)
-        }
-
         // Create and configure the speech recognition request.
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
         recognitionRequest.shouldReportPartialResults = true
         recognitionRequest.requiresOnDeviceRecognition = false
+        
+        // Configure the microphone input.
+        let inputFormat = inputNode.outputFormat(forBus: 0)
+        let speechFormat = recognitionRequest.nativeAudioFormat
+        logger.debug("Recording format \(inputFormat), speech format \(speechFormat)")
+        var formatConverter: AVAudioConverter?
+        if (!inputFormat.isEqual(speechFormat)) {
+            formatConverter = AVAudioConverter(from:inputFormat, to: speechFormat)
+            formatConverter?.downmix = true
+        }
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+            guard let formatConverter = formatConverter else {
+                self.recognitionRequest?.append(buffer)
+                return
+            }
+            // self.recognitionRequest?.append(buffer)
+            let pcmBuffer = AVAudioPCMBuffer(pcmFormat: speechFormat, frameCapacity: AVAudioFrameCount(Double(buffer.frameLength) * speechFormat.sampleRate / inputFormat.sampleRate))
+            var error: NSError? = nil
+            
+            let inputBlock: AVAudioConverterInputBlock = {inNumPackets, outStatus in
+                outStatus.pointee = AVAudioConverterInputStatus.haveData
+                return buffer
+            }
+            
+            formatConverter.convert(to: pcmBuffer!, error: &error, withInputFrom: inputBlock)
+            
+            if error == nil {
+                self.recognitionRequest?.append(pcmBuffer!)
+            }
+        }
         
         // Create a recognition task for the speech recognition session.
         // Keep a reference to the task so that it can be canceled.
