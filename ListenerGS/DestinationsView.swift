@@ -7,6 +7,47 @@
 
 import SwiftUI
 
+struct PopOverView : View {
+    @State private var destination = ""
+    @Binding var showPopover: Bool
+    var destinations : GSDestinations
+    
+    var body: some View {
+        VStack {
+            Text("Enter the hostname or IP address of your GS:")
+                .font(.title2)
+            TextField("New destination", text: self.$destination) { isEditing in
+            } onCommit: {
+                self.showPopover = false
+                onAdd()
+            }
+            .padding()
+            HStack {
+                Button("Cancel") {
+                    self.showPopover = false
+                }
+                .padding()
+                Button("Add") {
+                    self.showPopover = false
+                    onAdd()
+                }
+                .padding()
+            }
+        }.padding()
+    }
+    
+    func onAdd() {
+        let newDestination = destination
+        destination = ""
+        // This schedules the add of the destination for 0.1 s from now.  Under iOS 14.x, it seems like there is
+        // a bug such that if I synchronously add the destination here, the popup will not dismiss.  Some kind of
+        // swiftui bug I think.  No issue in iOS 15 as far as I can tell.  So, this queuing of the add is only
+        // necessary as a workaround.
+        OperationQueue.main.schedule(after: OperationQueue.SchedulerTimeType(Date(timeIntervalSinceNow: 0.1))) {
+            destinations.onAdd(ipAddress: newDestination)
+        }
+    }
+}
 
 struct DestinationsView: View {
     @State private var editMode = EditMode.inactive
@@ -25,8 +66,15 @@ struct DestinationsView: View {
             .onDelete(perform: onDelete)
             .onMove(perform: onMove)
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                addButton
+            }
+        }
         .navigationBarTitle("GS Destinations")
-        .navigationBarItems(leading: EditButton(), trailing: addButton)
         .environment(\.editMode, $editMode)
     }
     
@@ -37,33 +85,10 @@ struct DestinationsView: View {
                             .popover(
                                 isPresented: self.$showPopover,
                                 arrowEdge: .bottom
-                            ) { addPopover } )
+                            ) { PopOverView(showPopover: self.$showPopover, destinations: destinations) } )
         default:
             return AnyView(EmptyView())
         }
-    }
-    
-    private var addPopover: some View {
-        VStack {
-            Text("Enter the hostname or IP address of your GS:")
-                .font(.title2)
-            TextField("New destination", text: self.$newDestination) { isEditing in
-            } onCommit: {
-                onAdd()
-            }
-            .padding()
-            HStack {
-                Button("Cancel") {
-                    self.showPopover = false
-                    editMode = EditMode.inactive
-                }
-                .padding()
-                Button("Add") {
-                    onAdd()
-                }
-                .padding()
-            }
-        }.padding()
     }
     
     private func onDelete(offsets: IndexSet) {
@@ -76,12 +101,6 @@ struct DestinationsView: View {
     
     func showAdd() {
         self.showPopover = true;
-    }
-    
-    func onAdd() {
-        destinations.onAdd(ipAddress: self.newDestination)
-        newDestination = ""
-        showPopover = false;
     }
 }
 
