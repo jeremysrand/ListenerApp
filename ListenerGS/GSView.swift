@@ -90,6 +90,8 @@ struct GSView: View {
         }
         .alert(item: $connection.errorMessage) { errorMessage in
             Alert(title:Text(errorMessage.title), message: Text(errorMessage.message))
+        }.onDisappear {
+            connection.disconnect()
         }
         
         Text(connection.textHeard)
