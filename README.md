@@ -1,10 +1,10 @@
 #  ListenerGS
 
-This is an iOS app that connects to an Apple IIgs over a network and streams text to it from voice dicatation.  It communicates to the [Listen NDA](https://github.com/jeremysrand/Listener) which must be running on your network capable Apple IIgs.  See that other project for more details about how to use this app.
+This is an iOS/iPadOS/macOS app that connects to an Apple IIgs over a network and streams text to it from voice dicatation.  It communicates to the [Listen NDA](https://github.com/jeremysrand/Listener) which must be running on your network capable Apple IIgs.  See that other project for more details about how to use this app.
 
 ## Obtaining a Copy
 
-I am getting close to making this available as a release that anyone can obtain.  It is currently in beta test and the iOS and macOS app have passed Apple's beta testing review.  That doesn't mean that the app will pass full review but I am hopeful.  So, perhaps soon I will be able to provide a link for where to download this for yourself.
+The app is now [available from the AppStore](https://apps.apple.com/us/app/listenergs/id1613273510?itsct=apps_box_badge&itscg=30200).  Also, you can find [zip archive of the macOS version](https://github.com/jeremysrand/ListenerApp/releases/download/v1.0/ListenerGS.zip) if you prefer to get your Mac software outside of the store.  You should also visit [rand-emonium.com](https://www.rand-emonium.com/listenergs/) to get links to the software for your Apple IIGS and information about using it.
 
 ## Some Technical Details
 
