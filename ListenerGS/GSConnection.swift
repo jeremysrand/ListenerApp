@@ -104,7 +104,7 @@ class GSConnection : ObservableObject {
         }
         
         if (!legalTransition) {
-            logger.error("Illegal requested state transition from \(oldState) to \(newState)")
+            logger.error("Illegal requested state transition from \(oldState, privacy: .public) to \(newState, privacy: .public)")
             errorOccurred(title: "Bad State Change", message: "Illegal state transition from \(oldState) to \(newState)")
         } else {
             state = newState
@@ -126,14 +126,14 @@ class GSConnection : ObservableObject {
     private func connectionSuccessful()
     {
         changeState(newState:.connected)
-        logger.debug("Connected to \(self.destination)")
+        logger.debug("Connected to \(self.destination, privacy: .public)")
     }
     
     func connect(destination : String) {
         self.destination = destination
         changeState(newState: .connecting)
         readQueue.addOperation { [weak self, destination] in
-            self?.logger.debug("Attempting to connect to \(destination)")
+            self?.logger.debug("Attempting to connect to \(destination, privacy: .public)")
             let client = TCPClient(address: destination, port: Int32(GSConnection.port))
             switch client.connect(timeout: 10) {
             case .success:
@@ -143,7 +143,7 @@ class GSConnection : ObservableObject {
                 }
             case .failure(let error):
                 client.close()
-                self?.logger.error("Failed to connect to \(destination): \(String(describing: error))")
+                self?.logger.error("Failed to connect to \(destination, privacy: .public): \(String(describing: error), privacy: .public)")
                 self?.mainQueue.addOperation {
                     self?.connectionFailed()
                 }
@@ -171,13 +171,13 @@ class GSConnection : ObservableObject {
                             self.trySend()
                         }
                     } else {
-                        self.logger.error("Unexpected message on socket from \(destination)")
+                        self.logger.error("Unexpected message on socket from \(destination, privacy: .public)")
                         self.errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
                         break
                     }
                 }
                 catch {
-                    self.logger.error("Unable to unpack message on socket from \(destination)")
+                    self.logger.error("Unable to unpack message on socket from \(destination, privacy: .public)")
                     self.errorOccurred(title: "Protocol Error", message: "Unexpected message from the GS")
                     break
                 }
@@ -230,7 +230,7 @@ class GSConnection : ObservableObject {
         case .success:
             break
         case .failure(let error):
-            self.logger.error("Unable to send header: \(String(describing: error))")
+            self.logger.error("Unable to send header: \(String(describing: error), privacy: .public)")
             return false
         }
         
@@ -319,14 +319,14 @@ class GSConnection : ObservableObject {
             case .success:
                 switch (client.send(data: bytes)) {
                 case .success:
-                    logger.debug("Sent text \"\(stringToSend)\"")
+                    logger.debug("Sent text \"\(stringToSend, privacy: .public)\"")
                     break
                 case .failure(let error):
                     mainQueue.addOperation {
                         self.errorOccurred(title: "Write Error", message: "Unable to send text to the GS")
                         self.disconnect()
                     }
-                    logger.error("Failed to send text: \(String(describing: error))")
+                    logger.error("Failed to send text: \(String(describing: error), privacy: .public)")
                     return false
                 }
             case .failure(let error):
@@ -334,7 +334,7 @@ class GSConnection : ObservableObject {
                     self.errorOccurred(title: "Write Error", message: "Unable to send text to the GS")
                     self.disconnect()
                 }
-                logger.error("Failed to send text: \(String(describing: error))")
+                logger.error("Failed to send text: \(String(describing: error), privacy: .public)")
             }
         }
         return true

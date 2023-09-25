@@ -82,7 +82,7 @@ class SpeechForwarder : SpeechForwarderProtocol {
         // Configure the microphone input.
         let inputFormat = inputNode.outputFormat(forBus: 0)
         let speechFormat = recognitionRequest.nativeAudioFormat
-        logger.debug("Recording format \(inputFormat), speech format \(speechFormat)")
+        logger.debug("Recording format \(inputFormat, privacy: .public), speech format \(speechFormat, privacy: .public)")
         var formatConverter: AVAudioConverter?
         if (!inputFormat.isEqual(speechFormat)) {
             formatConverter = AVAudioConverter(from:inputFormat, to: speechFormat)
@@ -114,17 +114,17 @@ class SpeechForwarder : SpeechForwarderProtocol {
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak connection] result, error in
             var isFinal = false
             
-            if let result = result {
-                // Update the text view with the results.
-                OperationQueue.main.addOperation {
-                    guard let connection = connection else { return }
-                    connection.set(text: result.bestTranscription.formattedString)
-                }
-                isFinal = result.isFinal
-            }
-            
             if error != nil {
-                self.logger.error("Error from recognizer: \(String(describing: error))")
+                self.logger.error("Error from recognizer: \(String(describing: error), privacy:.public)")
+            } else if let result = result {
+                isFinal = result.isFinal
+                if !isFinal || result.bestTranscription.formattedString != "" {
+                    // Update the text view with the results.
+                    OperationQueue.main.addOperation {
+                        guard let connection = connection else { return }
+                        connection.set(text: result.bestTranscription.formattedString)
+                    }
+                }
             }
             
             if error != nil || isFinal {
