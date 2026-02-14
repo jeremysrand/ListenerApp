@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct PopOverView : View {
+struct SheetView : View {
     @State private var destination = ""
-    @Binding var showPopover: Bool
+    @Binding var showSheet: Bool
     var destinations : GSDestinations
     
     var body: some View {
@@ -18,17 +18,17 @@ struct PopOverView : View {
                 .font(.title2)
             TextField("New destination", text: self.$destination) { isEditing in
             } onCommit: {
-                self.showPopover = false
+                self.showSheet = false
                 onAdd()
             }
             .padding()
             HStack {
                 Button("Cancel") {
-                    self.showPopover = false
+                    self.showSheet = false
                 }
                 .padding()
                 Button("Add") {
-                    self.showPopover = false
+                    self.showSheet = false
                     onAdd()
                 }
                 .padding()
@@ -51,7 +51,7 @@ struct PopOverView : View {
 
 struct DestinationsView: View {
     @State private var editMode = EditMode.inactive
-    @State private var showPopover = false
+    @State private var showSheet = false
     @State private var newDestination = ""
     
     @StateObject private var destinations = GSDestinations()
@@ -68,7 +68,9 @@ struct DestinationsView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                EditButton()
+                Button(action: toggleEdit) {
+                    Text(editMode == .active ? "Done" : "Edit")
+                }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 addButton
@@ -82,10 +84,9 @@ struct DestinationsView: View {
         switch editMode {
         case .inactive:
             return AnyView(Button(action: showAdd) { Image(systemName: "plus") }
-                            .popover(
-                                isPresented: self.$showPopover,
-                                arrowEdge: .bottom
-                            ) { PopOverView(showPopover: self.$showPopover, destinations: destinations) } )
+                .sheet(isPresented: self.$showSheet) {
+                    SheetView(showSheet: self.$showSheet, destinations: destinations)
+                })
         default:
             return AnyView(EmptyView())
         }
@@ -99,8 +100,12 @@ struct DestinationsView: View {
         destinations.onMove(source: source, destination: destination)
     }
     
+    func toggleEdit() {
+        editMode = (editMode == .active ? .inactive : .active)
+    }
+    
     func showAdd() {
-        self.showPopover = true;
+        self.showSheet = true;
     }
 }
 
@@ -109,3 +114,4 @@ struct DestinationsView_Previews: PreviewProvider {
         DestinationsView()
     }
 }
+
